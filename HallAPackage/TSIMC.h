@@ -15,16 +15,14 @@
 #define TSIMC_H
 
 #include <iostream>
-#include "MySoftwarePackage/TPlots.h"
-#include "MySoftwarePackage/TCalculations.h"
-#include "MySoftwarePackage/TAnalysis.h"
+#include "TAnalysisSIMC.h"
 
 /**
  \class TSIMC
  User defined class TSIMC ... these comments are used to generate
  doxygen documentation!
  */
-class TSIMC: public TPlots{
+class TSIMC{
     
 public:
     
@@ -32,12 +30,19 @@ public:
     
     
     /// Default constructor
-    TSIMC(){}
+    TSIMC(){ YtagCut = "(-5 < hsytar) && (hsytar < 5)"; }
     
     /// Default destructor
     ~TSIMC(){}
     
     
+    // cuts
+    TCut YtagCut;
+
+    void DrawQuantity (TString, int,double, double, TString, TString, int , int *
+                      , bool DoAddLegend = false, TCut cut = "ok_spec==1 && (-5 < hsytar) && (hsytar < 5)");
+    void DrawResolution (TString, int,double, double, TString, TString, int , int *
+                      , bool DoAddLegend = false, TCut cut = "ok_spec==1 && (-5 < hsytar) && (hsytar < 5)");
 
     
 };

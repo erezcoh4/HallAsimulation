@@ -7,12 +7,12 @@
 
 // two arms
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TAnalysisSIMC::TAnalysisSIMC(TString fInFileName, TString target, int beamdays,float simcQ, float i):
-TPlots("$SIMCFiles/data/" + fInFileName + ".root","h666",fInFileName,false){
+TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, TString target, int beamdays,float simcQ, float i):
+TPlots(Form("$SIMCFiles/data/coincidence_%d.root",fFileNumber),"h666",Form("coincidence_%d",fFileNumber),true){
     
-    SetPath         ("$SIMCAnaFiles");
-    SetInFileName   ( fInFileName );
-    SetInFile       ( new TFile( "$SIMCFiles/data/" + InFileName + ".root"));
+    SetPath         ("$SIMCFiles");
+    SetInFileName   ( Form("coincidence_%d",fFileNumber) );
+    SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
     SetTree         ((TTree*) InFile->Get( "h666" ));
     SetBeamDays     ( beamdays );
     SetSIMCQ        ( simcQ );
@@ -30,12 +30,12 @@ TPlots("$SIMCFiles/data/" + fInFileName + ".root","h666",fInFileName,false){
 
 // single arm
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TAnalysisSIMC::TAnalysisSIMC(TString path, TString fInFileName, double HRSmomentum)
-:TPlots("$SIMCFiles/data" + fInFileName + ".root","h1",fInFileName,false){
+TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, double HRSmomentum)
+:TPlots(Form("$SIMCFiles/data/SingleArm_%d.root",fFileNumber),"h1",Form("SingleArm_%d",fFileNumber),true){
 
-    SetPath         ("$SIMCAnaFiles");
-    SetInFileName   ( fInFileName );
-    SetInFile       ( new TFile( "$SIMCFiles/data/" + InFileName + ".root"));
+    SetPath         ("$SIMCFiles");
+    SetInFileName   ( Form("SingleArm_%d",fFileNumber) );
+    SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
     SetTree         ((TTree*) InFile->Get( "h1" ));
     SetExpType      ( "SingleArm" );
     SetAliases      ();
@@ -172,10 +172,19 @@ void TAnalysisSIMC::ScaleToYield(TH1F * h,bool DoPrint){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TH1F *  TAnalysisSIMC::Resolution1D(TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
-                                    , TString Title, TString Units, int color){
+                                    , TString Title, TString XTitle, int color){
     return H1(Form("(%s-%si)",var.Data(),var.Data()),cut,option,Nbins,Xlow,Xup
-              ,"Res. in "+Title, Title+" ["+Units+"]", "", color);
+              ,"Res. in "+Title, XTitle, "", color);
 }
+
+
+
+
+
+
+
+
+
 
 
 #endif

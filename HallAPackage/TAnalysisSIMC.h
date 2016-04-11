@@ -15,7 +15,9 @@
 #define TANALYSISSIMC_H
 
 #include <iostream>
-#include "TSIMC.h"
+#include "MySoftwarePackage/TPlots.h"
+#include "MySoftwarePackage/TCalculations.h"
+#include "MySoftwarePackage/TAnalysis.h"
 using namespace std;
 
 
@@ -48,8 +50,8 @@ public:
 
     
     
-    TAnalysisSIMC (TString, TString, int beamdays = 1,float simcQ = 90, float i = 25); // two arms
-    TAnalysisSIMC (TString, TString, double p);    // single arm
+    TAnalysisSIMC (int filenumber, TString target, int beamdays = 1,float simcQ = 90, float i = 25); // two arms
+    TAnalysisSIMC (int filenumber=1, double p=1.);    // single arm
     ~TAnalysisSIMC (){};
 
     
@@ -84,7 +86,7 @@ public:
     
     // TH1F
     TH1F *  H1          (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",TString YT="",int c=1);
-    TH1F *  Resolution1D(TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString u="",int c=1);
+    TH1F *  Resolution1D(TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
     
 
 };

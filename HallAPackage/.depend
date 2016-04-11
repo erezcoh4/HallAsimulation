@@ -126,7 +126,6 @@ TAnalysisSIMC.o: TAnalysisSIMC.cxx TAnalysisSIMC.h \
   /usr/include/sys/_types/_fsfilcnt_t.h /usr/include/_types/_nl_item.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/bitset \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__bit_reference \
-  TSIMC.h \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TPlots.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iomanip \
   /usr/include/math.h \
@@ -494,6 +493,7 @@ TSIMC.o: TSIMC.cxx TSIMC.h \
   /usr/include/sys/_types/_fsfilcnt_t.h /usr/include/_types/_nl_item.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/bitset \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__bit_reference \
+  TAnalysisSIMC.h \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TPlots.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iomanip \
   /usr/include/math.h \
