@@ -27,24 +27,27 @@ class TSIMC{
 public:
     
     
-    
+    TCut okCut , YtagCut;
+    vector      <TAnalysisSIMC> ana;
+//    char    ** Names;
+    vector      <TString> Names;
+
+    int     * FileNumbers;
+    vector      <int> colors;
+    int     N;
     
     /// Default constructor
-    TSIMC(){ YtagCut = "(-5 < hsytar) && (hsytar < 5)"; }
+    TSIMC(int, int * , int *, char **);
     
     /// Default destructor
     ~TSIMC(){}
     
     
-    // cuts
-    TCut YtagCut;
+ 
+    void DrawQuantity (TString, int,double, double, TString, TString, bool DoAddLegend = false);
+    void DrawResolution (TString, int,double, double, float MulFac, TString, TString, bool DoAddLegend = false);
 
-    void DrawQuantity (TString, int,double, double, TString, TString, int , int *
-                      , bool DoAddLegend = false, TCut cut = "ok_spec==1 && (-5 < hsytar) && (hsytar < 5)");
-    void DrawResolution (TString, int,double, double, TString, TString, int , int *
-                      , bool DoAddLegend = false, TCut cut = "ok_spec==1 && (-5 < hsytar) && (hsytar < 5)");
-
-    
+    void SetCuts();
 };
 
 #endif

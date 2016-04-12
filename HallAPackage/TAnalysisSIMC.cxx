@@ -55,7 +55,7 @@ void TAnalysisSIMC::SetGlobals(){
     L           = 118;// HRS equipped with a set of collimators, positioned 1.1097+/-0.005 (RHRS) and 1.1017+/-0.005 (LHRS)
     Nentries    = Tree -> GetEntries();
     totweights  = GetBranchSum((ExpType=="SingleArm")?"ok_spec":"Weight",(ExpType=="SingleArm")?"ok_spec":"Weight");
-    printf("Initiating SIMC with %d Nentries\n",Nentries);
+    //    printf("Initiating SIMC (%s) with %d Nentries\n",InFile->GetName(),Nentries);
 }
 
 
