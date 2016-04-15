@@ -6,8 +6,13 @@ from ROOT import TString, TPlots, TAnalysisSIMC , TSIMC
 from rootpy.interactive import wait
 
 init.createnewdir()
+
+DoSOSgenerated  = False
 DoSOS           = False
-DoResolution    = True
+DoResolution    = False
+DoEventsFeatures= True
+
+
 
 plot            = TPlots()
 FileNumbers     = (c_int*2)( 3  , 4 ) # c int array
@@ -18,6 +23,21 @@ simc            = TSIMC(N , FileNumbers, colors, Names )
 
 
 
+if DoSOSgenerated:
+    c = plot.CreateCanvas("SOSgenerated","Divide",2,2 )
+    c.cd(1)
+    simc.DrawQuantity("hsyptari",100 , -0.1 , 0.1   , "#phi_{tag}"  ,"rad"  );
+    c.cd(2)
+    simc.DrawQuantity("hsxptari",100 , -0.1 , 0.1   , "#theta_{tag}","rad"  );
+    c.cd(3)
+    simc.DrawQuantity("hsdeltai",50  , -6   , 6     , "#delta"      ,"%"     , False , True , -4.5 , 4.5 );
+    c.cd(4)
+    simc.DrawQuantity("hsytari" ,50  , -6   , 6     , "y_{tag}"     ,"cm"    , True );
+    c.Update()
+    wait()
+    c.SaveAs(init.dirname()+"/SOSgenerated.pdf")
+
+
 if DoSOS:
     c = plot.CreateCanvas("SOS","Divide",2,2 )
     c.cd(1)
@@ -25,9 +45,9 @@ if DoSOS:
     c.cd(2)
     simc.DrawQuantity("hsxptar",100 , -0.1 , 0.1   , "#theta_{tag}","rad"  );
     c.cd(3)
-    simc.DrawQuantity("hsdelta",50  , -6   , 6     , "#delta"      ,"%"    );
+    simc.DrawQuantity("hsdelta",50  , -6   , 6     , "#delta"      ,"%"     , False , True , -4.5 , 4.5 );
     c.cd(4)
-    simc.DrawQuantity("hsytar" ,50  , -6   , 6     , "y_{tag}"     ,"cm"   , True );
+    simc.DrawQuantity("hsytar" ,50  , -6   , 6     , "y_{tag}"     ,"cm"    , True );
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/SOS.pdf")
@@ -46,4 +66,15 @@ if DoResolution:
     cRes.Update()
     wait()
     cRes.SaveAs(init.dirname()+"/ResolutionsLogScaleYtg5cm.pdf")
+
+
+
+
+if DoEventsFeatures:
+    c = plot.CreateCanvas("EventsFeatures","Divide",1,1 )
+    c.cd(1)
+    simc.DrawQuantity2D("hsdelta","hsyptar",50  , -6   , 6  ,100 , -0.1 , 0.1   , "#delta"      ,"%"  , "#phi_{tag}"  ,"rad"  );
+    c.Update()
+    wait()
+    c.SaveAs(init.dirname()+"/EventsFeatures.pdf")
 
