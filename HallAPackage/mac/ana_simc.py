@@ -10,9 +10,9 @@ init.createnewdir()
 
 DoSOSgenerated  = False
 DoSOS           = False
-DoResolution    = True
+DoResolution    = False
 DoEventsFeatures= False
-DoCompareEvents = False
+DoCompareEvents = True
 
 
 
@@ -86,7 +86,7 @@ if DoCompareEvents:
     c = plot.CreateCanvas("CompareEvents","Divide",1,1 )
     c.cd(1)
     #    simc.MergeFiles(FileNumbers[0],FileNumbers[1])
-    simc.CompareVariable("0.01*hsdelta","", FileNumbers[0] , FileNumbers[1] , 100  , -1   , 1 , 1e4 , "[#Delta #delta(conf. 1) - #Delta #delta(conf. 2)]/#delta(gen.)" , "" )
+    simc.CompareVariable("0.01*hsdelta","", FileNumbers[0] , FileNumbers[1] , 100  , -0.4, 0.4, 1e4, "[#Delta #delta(conf. 1) - #Delta #delta(conf. 2)]/#delta(gen.)" , "" )
     # -0.0025 , 0.0025
     c.Update()
     wait()
