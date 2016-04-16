@@ -19,8 +19,8 @@ TPlots(Form("$SIMCFiles/data/coincidence_%d.root",fFileNumber),"h666",Form("coin
     SetI            ( i );
     SetTarget       ( target );
     SetExpType      ( "TwoArmsCoincidence" );
-    SetAliases      ();
     SetGlobals      ();
+//    SetAliases      ();
     SetNormFact     ();
     
 }
@@ -30,16 +30,17 @@ TPlots(Form("$SIMCFiles/data/coincidence_%d.root",fFileNumber),"h666",Form("coin
 
 // single arm
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, double HRSmomentum)
+TAnalysisSIMC::TAnalysisSIMC(int fFileNumber)
 :TPlots(Form("$SIMCFiles/data/SingleArm_%d.root",fFileNumber),"h1",Form("SingleArm_%d",fFileNumber),true){
     
     SetPath         ("$SIMCFiles");
     SetInFileName   ( Form("SingleArm_%d",fFileNumber) );
     SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
     SetTree         ((TTree*) InFile->Get( "h1" ));
+    cout << "opeining " << InFile->GetName() << endl;
     SetExpType      ( "SingleArm" );
-    SetAliases      ();
     SetGlobals      ();
+//    SetAliases      ();
     
 }
 
@@ -54,8 +55,8 @@ TAnalysisSIMC::TAnalysisSIMC(TString fFileName)
     SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
     SetTree         ((TTree*) InFile->Get( "h1" ));
     SetExpType      ( "SingleArm" );
-    SetAliases      ();
     SetGlobals      ();
+//    SetAliases      ();
     
 }
 
@@ -70,7 +71,7 @@ TAnalysisSIMC::TAnalysisSIMC(TString fFileName)
 void TAnalysisSIMC::SetGlobals(){
     L           = 118;// HRS equipped with a set of collimators, positioned 1.1097+/-0.005 (RHRS) and 1.1017+/-0.005 (LHRS)
     Nentries    = Tree -> GetEntries();
-    totweights  = GetBranchSum((ExpType=="SingleArm")?"ok_spec":"Weight",(ExpType=="SingleArm")?"ok_spec":"Weight");
+//    totweights  = GetBranchSum((ExpType=="SingleArm")?"ok_spec":"Weight",(ExpType=="SingleArm")?"ok_spec":"Weight");
     //    printf("Initiating SIMC (%s) with %d Nentries\n",InFile->GetName(),Nentries);
 }
 
@@ -135,7 +136,7 @@ void TAnalysisSIMC::SetAliases(){
     Tree -> SetAlias("Ysieve",Form("hsytar+%f*hsyptar",L));
     SetAlias("Xsieve",Form("0+%f*hsxptar",L));
     Tree -> SetAlias("Xsieve",Form("0+%f*hsxptar",L));
-    if (strcmp(Target,"D")==0){
+    if (ExpType!="SingleArm" && strcmp(Target,"D")==0){
         SetAlias("theta_rq","180-TMath::RadToDeg()*TMath::ACos(Pmpar/Pm)");
         Tree -> SetAlias("theta_rq","180-TMath::RadToDeg()*TMath::ACos(Pmpar/Pm)");
     }

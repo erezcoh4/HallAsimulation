@@ -4,15 +4,16 @@
 #include "TSIMC.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TSIMC::TSIMC(int fN, int * fFileNumbers , int fcolors[] , char ** fNames){
+TSIMC::TSIMC(const int fN, int fFileNumbers[fN] , int fcolors[fN] ){// , char ** fNames){
     SetCuts();
     N = fN;
     NFilesStr = "";
+
     for ( int i = 0 ; i < N ; i++ ) {
-        
-        FileNumbers[i]  = fFileNumbers[i];
-        ana.push_back(TAnalysisSIMC(FileNumbers[i]));
-        Names.push_back(fNames[i]);
+
+        FileNumbers.push_back(fFileNumbers[i]);
+        ana[i] = new TAnalysisSIMC(FileNumbers[i]);//(FileNumbers[i]);
+//        Names[i] = Form("%s",fNames[i]);
         colors.push_back(fcolors[i]);
         NFilesStr += Form("_%d",FileNumbers[i]);
        
@@ -45,7 +46,7 @@ void TSIMC::DrawQuantity(TString Var, int Nbins,
     
     for ( int i = 0 ; i < N ; i++ ) {
         
-        h[i]    = ana[i].H1(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,"",colors[i]);
+        h[i]    = ana[i]->H1(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,"",colors[i]);
         Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
         
     }
@@ -53,18 +54,19 @@ void TSIMC::DrawQuantity(TString Var, int Nbins,
     int BaseLineEntries = h[0] -> GetEntries();
     for ( int i = 0 ; i < N ; i++ ) {
         frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
-        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+//        Labels[i] = (Names[0]=="") ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+        Labels[i] = Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i]);
         h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
     }
     
     if (DoAddCuts) {
-        ana[0].Line(cutXlow,0,cutXlow,1.1*Maximum,2,2);
-        ana[0].Line(cutXup,0,cutXup,1.1*Maximum,2,2);
+        ana[0]->Line(cutXlow,0,cutXlow,1.1*Maximum,2,2);
+        ana[0]->Line(cutXup,0,cutXup,1.1*Maximum,2,2);
     }
     
     if (DoAddLegend){
-        ana[0].AddLegend(N,h,Labels,"f");
+        ana[0]->AddLegend(N,h,Labels,"f");
     }
 }
 
@@ -89,22 +91,23 @@ void TSIMC::DrawQuantity2D(TString VarX, TString VarY,
     
     for ( int i = 0 ; i < N ; i++ ) {
         
-        h2[i]   = ana[i].H2(VarX, VarY,cut,(i==0)?"":"same",NbinsX ,Xlow ,Xup,NbinsY ,Ylow ,Yup ,Title ,XTitle ,YTitle ,colors[i], 20, 0.9 , 1);
+        h2[i]   = ana[i]->H2(VarX, VarY,cut,(i==0)?"":"same",NbinsX ,Xlow ,Xup,NbinsY ,Ylow ,Yup ,Title ,XTitle ,YTitle ,colors[i], 20, 0.9 , 1);
     }
     
     int BaseLineEntries = h2[0] -> GetEntries();
     for ( int i = 0 ; i < N ; i++ ) {
         frac.push_back((float)h2[i]->GetEntries()/BaseLineEntries);
-        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+//        Labels[i] = (Names[0]=="") ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+        Labels[i] = Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i]);
     }
     
     if (DoAddCuts) {
-        ana[0].Box(cutXlow,cutYlow,cutXup,cutYup,2,2);
+        ana[0]->Box(cutXlow,cutYlow,cutXup,cutYup,2,2);
     }
     
     if (DoAddLegend){
-        ana[0].AddLegend(N,h2,Labels,"p");
+        ana[0]->AddLegend(N,h2,Labels,"p");
     }
 }
 
@@ -131,8 +134,7 @@ void TSIMC::DrawResolution(TString Var, int Nbins,double Xlow, double Xup, float
     
     for ( int i = 0 ; i < N ; i++ ) {
         
-        ana.push_back(TAnalysisSIMC(FileNumbers[i]));
-        h[i]    = ana[i].Resolution1D(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,colors[i]);
+        h[i]    = ana[i]->Resolution1D(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,colors[i]);
         Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
         
     }
@@ -142,97 +144,116 @@ void TSIMC::DrawResolution(TString Var, int Nbins,double Xlow, double Xup, float
     for ( int i = 0 ; i < N ; i++ ) {
         
         frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
-        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+//        Labels[i] = (Names[0]=="") ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+        Labels[i] = Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i]) ;
         TString txt = Form("RMS=%.2f(%.0f) %s" ,MulFac*h[i]->GetRMS(),100*MulFac*h[i]->GetRMSError(),Units.Data());
-        ana[i].Text(h[i]->GetMean()+0.1*h[i]->GetRMS(), Maximum*(1-0.1*i) ,txt , colors[i]);
+        ana[i]->Text(h[i]->GetMean()+0.1*h[i]->GetRMS(), Maximum*(1-0.1*i) ,txt , colors[i]);
         h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
         
     }
     
     if (DoAddLegend){
-        ana[0].AddLegend(N,h,Labels,"f");
+        ana[0]->AddLegend(N,h,Labels,"f");
     }
 }
 
 
 
-
-
-
-
-
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void TSIMC::MergeFiles(){
-    // look for difference in resolution of Var between Files 1...N
-    TCut cut = YtagCut && okCut;
-    TFile * MergedFile = new TFile(ana[0].GetPath()+"/data/Merged"+NFilesStr+".root","recreate");
-    cout << MergedFile->GetName() << endl;
+void TSIMC::MergeFiles( int i1, int i2){
+    // merge Files i1 and i2
+    TAnalysisSIMC * ana1 = new TAnalysisSIMC(i1);
+    TAnalysisSIMC * ana2 = new TAnalysisSIMC(i2);
+    NFilesStr = Form("_%d_%d",i1,i2);
+    TFile * MergedFile = new TFile(ana1->GetPath()+"/data/Merged"+NFilesStr+".root","recreate");
     TTree * MergedTree = new TTree("h1","Merged"+NFilesStr);
+    TTree * T1 = ana1->GetTree() , * T2 = ana2->GetTree();
+    
+    Float_t hsyptari_1  , hsxptari_1    , hsdeltai_1    , hsytari_1 ,   ok_spec_1;
+    Float_t hsyptari_2  , hsxptari_2    , hsdeltai_2    , hsytari_2 ,   ok_spec_2;
+    Float_t hsyptar_1   , hsxptar_1     , hsdelta_1     , hsytar_1;
+    Float_t hsyptar_2   , hsxptar_2     , hsdelta_2     , hsytar_2;
+    Int_t   entry       ;
     
     
-    Float_t hsyptari    , hsxptari  , hsdeltai  , hsytari;
-    Float_t hsyptar     , hsxptar   , hsdelta   , hsytar , ok_spec;
-    Int_t   entry     ;
     
-    for (int i = 0 ; i < N ; i++) {
-        
-        MergedTree -> Branch(Form("hsyptari_%d",FileNumbers[i])      ,&hsyptari  , Form("hsyptari_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("hsxptari_%d",FileNumbers[i])      ,&hsxptari  , Form("hsxptari_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("hsdeltai_%d",FileNumbers[i])      ,&hsdeltai  , Form("hsdeltai_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("hsytari_%d",FileNumbers[i])       ,&hsytari   , Form("hsytari_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("hsyptar_%d",FileNumbers[i])       ,&hsyptar   , Form("hsyptar_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("hsxptar_%d",FileNumbers[i])       ,&hsxptar   , Form("hsxptar_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("hsdelta_%d",FileNumbers[i])       ,&hsdelta   , Form("hsdelta_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("hsytar_%d",FileNumbers[i])        ,&hsytar    , Form("hsytar_%d/F",FileNumbers[i]));
-        MergedTree -> Branch(Form("ok_spec_%d",FileNumbers[i])       ,&ok_spec   , Form("ok_spec_%d/F",FileNumbers[i]));
-        MergedTree -> Branch("ok_spec"                               ,&ok_spec   , "ok_spec/F");
-        MergedTree -> Branch(Form("entry_%d",FileNumbers[i])         ,&entry     , Form("entry_%d/I",FileNumbers[i]));
+    MergedTree -> Branch("entry"                    ,&entry         , "entry/I");
+    
+    T1 -> SetBranchAddress("hsyptari"               , &hsyptari_1);
+    T1 -> SetBranchAddress("hsxptari"               , &hsxptari_1);
+    T1 -> SetBranchAddress("hsdeltai"               , &hsdeltai_1);
+    T1 -> SetBranchAddress("hsytari"                , &hsytari_1);
+    T1 -> SetBranchAddress("hsyptar"                , &hsyptar_1);
+    T1 -> SetBranchAddress("hsxptar"                , &hsxptar_1);
+    T1 -> SetBranchAddress("hsdelta"                , &hsdelta_1);
+    T1 -> SetBranchAddress("hsytar"                 , &hsytar_1);
+    T1 -> SetBranchAddress("ok_spec"                , &ok_spec_1);
+    MergedTree -> Branch(Form("hsyptari_%d",i1)     ,&hsyptari_1    , Form("hsyptari_%d/F",i1));
+    MergedTree -> Branch(Form("hsxptari_%d",i1)     ,&hsxptari_1    , Form("hsxptari_%d/F",i1));
+    MergedTree -> Branch(Form("hsdeltai_%d",i1)     ,&hsdeltai_1    , Form("hsdeltai_%d/F",i1));
+    MergedTree -> Branch(Form("hsytari_%d",i1)      ,&hsytari_1     , Form("hsytari_%d/F",i1));
+    MergedTree -> Branch(Form("hsyptar_%d",i1)      ,&hsyptar_1     , Form("hsyptar_%d/F",i1));
+    MergedTree -> Branch(Form("hsxptar_%d",i1)      ,&hsxptar_1     , Form("hsxptar_%d/F",i1));
+    MergedTree -> Branch(Form("hsdelta_%d",i1)      ,&hsdelta_1     , Form("hsdelta_%d/F",i1));
+    MergedTree -> Branch(Form("hsytar_%d",i1)       ,&hsytar_1      , Form("hsytar_%d/F",i1));
+    MergedTree -> Branch(Form("ok_spec_%d",i1)      ,&ok_spec_1     , Form("ok_spec_%d/F",i1));
+    
+    T2 -> SetBranchAddress("hsyptari"               , &hsyptari_2);
+    T2 -> SetBranchAddress("hsxptari"               , &hsxptari_2);
+    T2 -> SetBranchAddress("hsdeltai"               , &hsdeltai_2);
+    T2 -> SetBranchAddress("hsytari"                , &hsytari_2);
+    T2 -> SetBranchAddress("hsyptar"                , &hsyptar_2);
+    T2 -> SetBranchAddress("hsxptar"                , &hsxptar_2);
+    T2 -> SetBranchAddress("hsdelta"                , &hsdelta_2);
+    T2 -> SetBranchAddress("hsytar"                 , &hsytar_2);
+    T2 -> SetBranchAddress("ok_spec"                , &ok_spec_2);
+    MergedTree -> Branch(Form("hsyptari_%d",i2)     ,&hsyptari_2    , Form("hsyptari_%d/F",i2));
+    MergedTree -> Branch(Form("hsxptari_%d",i2)     ,&hsxptari_2    , Form("hsxptari_%d/F",i2));
+    MergedTree -> Branch(Form("hsdeltai_%d",i2)     ,&hsdeltai_2    , Form("hsdeltai_%d/F",i2));
+    MergedTree -> Branch(Form("hsytari_%d",i2)      ,&hsytari_2     , Form("hsytari_%d/F",i2));
+    MergedTree -> Branch(Form("hsyptar_%d",i2)      ,&hsyptar_2     , Form("hsyptar_%d/F",i2));
+    MergedTree -> Branch(Form("hsxptar_%d",i2)      ,&hsxptar_2     , Form("hsxptar_%d/F",i2));
+    MergedTree -> Branch(Form("hsdelta_%d",i2)      ,&hsdelta_2     , Form("hsdelta_%d/F",i2));
+    MergedTree -> Branch(Form("hsytar_%d",i2)       ,&hsytar_2      , Form("hsytar_%d/F",i2));
+    MergedTree -> Branch(Form("ok_spec_%d",i2)      ,&ok_spec_2     , Form("ok_spec_%d/F",i2));
+    
+    
 
-        
-        TTree * TmpTree = ana[i].GetTree();
-        
-        TmpTree -> SetBranchAddress("hsyptari"          , &hsyptari);
-        TmpTree -> SetBranchAddress("hsxptari"          , &hsxptari);
-        TmpTree -> SetBranchAddress("hsdeltai"          , &hsdeltai);
-        TmpTree -> SetBranchAddress("hsytari"           , &hsytari);
-        TmpTree -> SetBranchAddress("hsyptar"           , &hsyptar);
-        TmpTree -> SetBranchAddress("hsxptar"           , &hsxptar);
-        TmpTree -> SetBranchAddress("hsdelta"           , &hsdelta);
-        TmpTree -> SetBranchAddress("hsytar"            , &hsytar);
-        TmpTree -> SetBranchAddress("ok_spec"           , &ok_spec);
-        
-        
-        for (entry = 0; entry < TmpTree->GetEntries() ; entry++) {
-            TmpTree     -> GetEntry();
-            MergedTree  -> Fill();
-            if (entry%(100000) == 0) {
-                Printf("[%.0f%%] of file %d",100*((float)entry/ana[i].GetEntries()),FileNumbers[i]);
-            }
+    for (entry = 0; entry < T1->GetEntries() ; entry++) {
+        T1 -> GetEntry(entry);
+        T2 -> GetEntry(entry);
+        MergedTree  -> Fill();
+        if (entry%(100000) == 0) {
+            Printf("[%.0f%%]",100*((float)entry/T1->GetEntries()));
         }
-        
-        delete TmpTree;
     }
     
     MergedTree -> Write();
     MergedFile -> Close();
-
+    
 }
 
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void TSIMC::CompareVariable(TString Var, TString cut,
-                            int fNum1, int fNum2,
-                            int Nbins, double Xlow, double Xup,
+TH1F* TSIMC::CompareVariable(TString Var, TString cutstr,
+                            int i1, int i2,
+                            int Nbins, double Xlow, double Xup, double MulFac,
                             TString Title, TString Units){
-    TAnalysisSIMC anaMerged("Merged"+NFilesStr);
-    TString XTitle = Form("%s (%d) - %s (%d)",Var.Data(),fNum1,Var.Data(),fNum2);
-    XTitle += (Units!="") ? " [" + Units + "]" : "";
-    TCut compareCut = Form("entry_%d == entry_%d",fNum1,fNum2);
-    anaMerged.H1(Form("%s_%d - %s_%d",Var.Data(),fNum1,Var.Data(),fNum2),Form("%s",cut.Data()) && compareCut,"HIST e",Nbins ,Xlow ,Xup,Title,XTitle);
+    
+    TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
+    Units           = (MulFac==1e6) ? "u"+Units : ( (MulFac==1e4) ? "e-4"+Units :  ((MulFac==1e3) ? "m"+Units : Units));
+    TString XTitle  = (Title=="") ? Form("[ Res(%s) (file %d) - Res(%s) (file %d) ] / %s (gen.) ",Var.Data(),i1,Var.Data(),i2) : Title;
+    XTitle         += (Units!=""&&Units!="e-4") ? " [" + Units + "]" : "";
+    TCut cut        = Form("%s",cutstr.Data());
+    cut             = cut && Form("ok_spec_%d &&  ok_spec_%d ",i1,i2);
+    TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) , Res2 = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
+    TH1F * h        = anaMerged.H1(Form("((%s) - (%s))/%si_%d",Res1.Data(),Res2.Data(),Var.Data(),i1),cut,"HIST e",Nbins ,Xlow ,Xup,Title,XTitle);
+    anaMerged.Text( h->GetMean()+h->GetRMS() , h->GetMaximum() , Form("Mean=%.1e #pm %.1e" ,h->GetMean(),h->GetMeanError()) );
+    anaMerged.Text( h->GetMean()+h->GetRMS() , 0.8*h->GetMaximum() , Form("RMS=%.1e #pm %.1e" ,h->GetRMS(),h->GetRMSError()) );
+    return h;
+    
 }
 
 

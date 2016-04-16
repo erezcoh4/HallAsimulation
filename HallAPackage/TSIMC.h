@@ -28,19 +28,19 @@ public:
     
     
     TCut okCut , YtagCut;
-    vector      <TAnalysisSIMC> ana;
+    TAnalysisSIMC * ana[10];
     vector      <TString> Names;
     TString     NFilesStr;
-    int         * FileNumbers;
+    vector      <int> FileNumbers;
     vector      <int> colors;
     int         N;
     
     /// Default constructor
-    TSIMC(int, int * , int *, char **);
+    TSIMC (){};
+    TSIMC (int, int * , int *);//, char **);
     
     /// Default destructor
-    ~TSIMC(){}
-    
+    ~TSIMC() { }
     
  
     void      DrawQuantity (TString, int,double, double, TString, TString, bool DoAddLegend = false, bool DoAddCuts = false , double cXl=0, double cXu=0);
@@ -48,11 +48,11 @@ public:
                             bool DoAddLegend = false, bool DoAddCuts = false,double cXl=0, double cXu=0,double cYl=0, double cYu=0);
     void    DrawResolution (TString, int,double, double, float MulFac, TString, TString, bool DoAddLegend = false);
 
-    void SetCuts();
+    void           SetCuts ();
 
 
-    void  CompareVariable (TString, TString, int, int, int, double, double, TString, TString);
-    void       MergeFiles ();
+    void        MergeFiles (int, int);
+    TH1F*  CompareVariable (TString, TString, int, int, int, double, double, double, TString, TString);
 
 
 

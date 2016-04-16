@@ -7,7 +7,6 @@ def dirname( ):
     return dirname;
 
 def createnewdir( ):
-    print "in createnewdir"
     dirfmt = "/Users/erezcohen/Desktop/%4d-%02d-%02d"
     dirname = dirfmt % time.localtime()[0:3]
     try:

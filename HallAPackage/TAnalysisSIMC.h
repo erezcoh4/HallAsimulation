@@ -49,9 +49,9 @@ public:
     
 
     
-    
+    TAnalysisSIMC (){};
     TAnalysisSIMC (int filenumber, TString target, int beamdays = 1,float simcQ = 90, float i = 25); // two arms
-    TAnalysisSIMC (int filenumber=1, double p=1.);    // single arm
+    TAnalysisSIMC (int filenumber);    // single arm
     TAnalysisSIMC (TString fFileName);     // single arm
     ~TAnalysisSIMC (){};
 

@@ -2,6 +2,7 @@
 # > python mac/ana_simc.py
 import Initiation as init
 from ctypes import c_int, c_char, c_char_p
+import ROOT
 from ROOT import TString, TPlots, TAnalysisSIMC , TSIMC
 from rootpy.interactive import wait
 
@@ -20,7 +21,7 @@ FileNumbers     = (c_int*2)( 5  , 6 ) # c int array
 colors          = (c_int*2)( 6  , 4 )
 Names           = (c_char_p*2)( "configuration 1" , "configuration 2" )
 N               = len(FileNumbers)
-simc            = TSIMC(N , FileNumbers, colors, Names )
+simc            = TSIMC(N , FileNumbers, colors)#, Names )
 
 
 
@@ -83,9 +84,9 @@ if DoEventsFeatures:
 if DoCompareEvents:
     c = plot.CreateCanvas("CompareEvents","Divide",1,1 )
     c.cd(1)
-#    simc.MergeFiles()
-#    simc.CompareVariable("hsdeltai","", 5 , 6 ,50  , -10   , 10 , "#delta"      ,"%"   )
-    simc.CompareVariable("hsdelta","ok_spec", 5 , 6 ,50  , -10   , 10 , "event number" , "" )
+    #    simc.MergeFiles(FileNumbers[0],FileNumbers[1])
+    simc.CompareVariable("0.01*hsdelta","", FileNumbers[0] , FileNumbers[1] , 100  , -1   , 1 , 1e4 , "[#Delta #delta(conf. 1) - #Delta #delta(conf. 2)]/#delta(gen.)" , "" )
+    # -0.0025 , 0.0025
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/CompareEvents.pdf")
