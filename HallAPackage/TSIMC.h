@@ -30,10 +30,10 @@ public:
     TCut okCut , YtagCut;
     vector      <TAnalysisSIMC> ana;
     vector      <TString> Names;
-
-    int     * FileNumbers;
+    TString     NFilesStr;
+    int         * FileNumbers;
     vector      <int> colors;
-    int     N;
+    int         N;
     
     /// Default constructor
     TSIMC(int, int * , int *, char **);
@@ -49,6 +49,13 @@ public:
     void    DrawResolution (TString, int,double, double, float MulFac, TString, TString, bool DoAddLegend = false);
 
     void SetCuts();
+
+
+    void  CompareVariable (TString, TString, int, int, int, double, double, TString, TString);
+    void       MergeFiles ();
+
+
+
 };
 
 #endif

@@ -10,12 +10,13 @@ init.createnewdir()
 DoSOSgenerated  = False
 DoSOS           = False
 DoResolution    = False
-DoEventsFeatures= True
+DoEventsFeatures= False
+DoCompareEvents = True
 
 
 
 plot            = TPlots()
-FileNumbers     = (c_int*2)( 3  , 4 ) # c int array
+FileNumbers     = (c_int*2)( 5  , 6 ) # c int array
 colors          = (c_int*2)( 6  , 4 )
 Names           = (c_char_p*2)( "configuration 1" , "configuration 2" )
 N               = len(FileNumbers)
@@ -69,7 +70,6 @@ if DoResolution:
 
 
 
-
 if DoEventsFeatures:
     c = plot.CreateCanvas("EventsFeatures","Divide",1,1 )
     c.cd(1)
@@ -77,4 +77,16 @@ if DoEventsFeatures:
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/EventsFeatures.pdf")
+
+
+
+if DoCompareEvents:
+    c = plot.CreateCanvas("CompareEvents","Divide",1,1 )
+    c.cd(1)
+#    simc.MergeFiles()
+#    simc.CompareVariable("hsdeltai","", 5 , 6 ,50  , -10   , 10 , "#delta"      ,"%"   )
+    simc.CompareVariable("hsdelta","ok_spec", 5 , 6 ,50  , -10   , 10 , "event number" , "" )
+    c.Update()
+    wait()
+    c.SaveAs(init.dirname()+"/CompareEvents.pdf")
 

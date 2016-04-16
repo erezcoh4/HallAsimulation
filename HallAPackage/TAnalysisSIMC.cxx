@@ -32,7 +32,7 @@ TPlots(Form("$SIMCFiles/data/coincidence_%d.root",fFileNumber),"h666",Form("coin
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, double HRSmomentum)
 :TPlots(Form("$SIMCFiles/data/SingleArm_%d.root",fFileNumber),"h1",Form("SingleArm_%d",fFileNumber),true){
-
+    
     SetPath         ("$SIMCFiles");
     SetInFileName   ( Form("SingleArm_%d",fFileNumber) );
     SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
@@ -40,7 +40,23 @@ TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, double HRSmomentum)
     SetExpType      ( "SingleArm" );
     SetAliases      ();
     SetGlobals      ();
+    
+}
 
+
+// single arm - from a different file name (e.g. merged) - April 15,2016
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+TAnalysisSIMC::TAnalysisSIMC(TString fFileName)
+:TPlots(Form("$SIMCFiles/data/%s.root",fFileName.Data()),"h1",fFileName,true){
+    
+    SetPath         ("$SIMCFiles");
+    SetInFileName   ( fFileName );
+    SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
+    SetTree         ((TTree*) InFile->Get( "h1" ));
+    SetExpType      ( "SingleArm" );
+    SetAliases      ();
+    SetGlobals      ();
+    
 }
 
 
