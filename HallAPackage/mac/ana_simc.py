@@ -10,9 +10,10 @@ init.createnewdir()
 
 DoSOSgenerated  = False
 DoSOS           = False
-DoResolution    = False
+DoResolution    = True
 DoEventsFeatures= False
-DoCompareEvents = True
+DoCompareEvents = False
+
 
 
 
@@ -20,8 +21,8 @@ plot            = TPlots()
 FileNumbers     = (c_int*2)( 5  , 6 ) # c int array
 colors          = (c_int*2)( 6  , 4 )
 Names           = (c_char_p*2)( "configuration 1" , "configuration 2" )
-N               = len(FileNumbers)
-simc            = TSIMC(N , FileNumbers, colors)#, Names )
+#N               = len(FileNumbers)
+simc            = TSIMC(len(FileNumbers) , FileNumbers, colors, Names )
 
 
 

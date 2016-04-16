@@ -37,7 +37,7 @@ public:
     
     /// Default constructor
     TSIMC (){};
-    TSIMC (int, int * , int *);//, char **);
+    TSIMC (int, int * , int *, char **);
     
     /// Default destructor
     ~TSIMC() { }

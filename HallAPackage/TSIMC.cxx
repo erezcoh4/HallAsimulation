@@ -4,7 +4,7 @@
 #include "TSIMC.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TSIMC::TSIMC(const int fN, int fFileNumbers[fN] , int fcolors[fN] ){// , char ** fNames){
+TSIMC::TSIMC(const int fN, int fFileNumbers[fN] , int fcolors[fN]  , char ** fNames){
     SetCuts();
     N = fN;
     NFilesStr = "";
@@ -13,7 +13,7 @@ TSIMC::TSIMC(const int fN, int fFileNumbers[fN] , int fcolors[fN] ){// , char **
 
         FileNumbers.push_back(fFileNumbers[i]);
         ana[i] = new TAnalysisSIMC(FileNumbers[i]);//(FileNumbers[i]);
-//        Names[i] = Form("%s",fNames[i]);
+        Names.push_back(Form("%s",fNames[i]));
         colors.push_back(fcolors[i]);
         NFilesStr += Form("_%d",FileNumbers[i]);
        
@@ -54,9 +54,8 @@ void TSIMC::DrawQuantity(TString Var, int Nbins,
     int BaseLineEntries = h[0] -> GetEntries();
     for ( int i = 0 ; i < N ; i++ ) {
         frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
-//        Labels[i] = (Names[0]=="") ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
-        Labels[i] = Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i]);
+        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
         h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
     }
     
@@ -97,9 +96,8 @@ void TSIMC::DrawQuantity2D(TString VarX, TString VarY,
     int BaseLineEntries = h2[0] -> GetEntries();
     for ( int i = 0 ; i < N ; i++ ) {
         frac.push_back((float)h2[i]->GetEntries()/BaseLineEntries);
-//        Labels[i] = (Names[0]=="") ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
-        Labels[i] = Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i]);
+        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
     }
     
     if (DoAddCuts) {
@@ -144,9 +142,8 @@ void TSIMC::DrawResolution(TString Var, int Nbins,double Xlow, double Xup, float
     for ( int i = 0 ; i < N ; i++ ) {
         
         frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
-//        Labels[i] = (Names[0]=="") ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
-        Labels[i] = Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i]) ;
+        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
         TString txt = Form("RMS=%.2f(%.0f) %s" ,MulFac*h[i]->GetRMS(),100*MulFac*h[i]->GetRMSError(),Units.Data());
         ana[i]->Text(h[i]->GetMean()+0.1*h[i]->GetRMS(), Maximum*(1-0.1*i) ,txt , colors[i]);
         h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
