@@ -52,7 +52,7 @@ public:
 
 
     void        MergeFiles (int, int);
-    TH1F*  CompareVariable (TString, TString, int, int, int, double, double, double, TString, TString);
+    TH1F*  CompareVariable (TString, TString, int, int, int, double, double, TString, TString);
 
 
 

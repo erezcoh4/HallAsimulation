@@ -236,19 +236,18 @@ void TSIMC::MergeFiles( int i1, int i2){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TH1F* TSIMC::CompareVariable(TString Var, TString cutstr,
                             int i1, int i2,
-                            int Nbins, double Xlow, double Xup, double MulFac,
+                            int Nbins, double Xlow, double Xup,
                             TString Title, TString Units){
     
     TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
-    Units           = (MulFac==1e6) ? "u"+Units : ( (MulFac==1e4) ? "e-4"+Units :  ((MulFac==1e3) ? "m"+Units : Units));
-    TString XTitle  = (Title=="") ? Form("[ Res(%s) (file %d) - Res(%s) (file %d) ] / %s (gen.) ",Var.Data(),i1,Var.Data(),i2) : Title;
-    XTitle         += (Units!=""&&Units!="e-4") ? " [" + Units + "]" : "";
+    TString XTitle  = Form("[ #Delta(%s)_{%d} - #Delta(%s)_{%d} ] / %s(gen.) [%%]",Title.Data(),i1,Title.Data(),i2,Title.Data()) ;
+    Title           = "diff. in resolution in " + Title;
     TCut cut        = Form("%s",cutstr.Data());
     cut             = cut && Form("ok_spec_%d &&  ok_spec_%d ",i1,i2);
     TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) , Res2 = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
-    TH1F * h        = anaMerged.H1(Form("((%s) - (%s))/%si_%d",Res1.Data(),Res2.Data(),Var.Data(),i1),cut,"HIST e",Nbins ,Xlow ,Xup,Title,XTitle);
-    anaMerged.Text( h->GetMean()+h->GetRMS() , h->GetMaximum() , Form("Mean=%.1e #pm %.1e" ,h->GetMean(),h->GetMeanError()) );
-    anaMerged.Text( h->GetMean()+h->GetRMS() , 0.8*h->GetMaximum() , Form("RMS=%.1e #pm %.1e" ,h->GetRMS(),h->GetRMSError()) );
+    TH1F * h        = anaMerged.H1(Form("100.*((%s) - (%s))/%si_%d",Res1.Data(),Res2.Data(),Var.Data(),i1),cut,"HIST e",Nbins ,Xlow ,Xup,Title,XTitle);
+    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , h->GetMaximum() , Form("Mean=%.1f %%" ,h->GetMean()) );
+//    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , 0.8*h->GetMaximum() , Form("RMS=%.1f(%.0f) %%" ,h->GetRMS(),10*h->GetRMSError()) );
     return h;
     
 }

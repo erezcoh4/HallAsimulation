@@ -242,6 +242,14 @@ TAnalysisSIMC.o: TAnalysisSIMC.cxx TAnalysisSIMC.h \
   /usr/local/Cellar/root6/6.06.02/include/root/Buttons.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TAttCanvas.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TCanvasImp.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TF1.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TFormula.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TBits.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TMethodCall.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/list \
+  /usr/local/Cellar/root6/6.06.02/include/root/Math/ParamFunctor.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TF2.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TF12.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TH1F.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TH1.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TAxis.h \
@@ -261,12 +269,6 @@ TAnalysisSIMC.o: TAnalysisSIMC.cxx TAnalysisSIMC.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TStyle.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TColor.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TMultiGraph.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TF1.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TFormula.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TBits.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TMethodCall.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/list \
-  /usr/local/Cellar/root6/6.06.02/include/root/Math/ParamFunctor.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGraphErrors.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGraph.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TLegend.h \
@@ -306,6 +308,7 @@ TAnalysisSIMC.o: TAnalysisSIMC.cxx TAnalysisSIMC.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGeoBBox.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGeoShape.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGaxis.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TRandom3.h \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TCalculations.h \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TAnalysis.h \
   /usr/local/Cellar/root6/6.06.02/include/root/RooGlobalFunc.h \
@@ -622,6 +625,14 @@ TSIMC.o: TSIMC.cxx TSIMC.h \
   /usr/local/Cellar/root6/6.06.02/include/root/Buttons.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TAttCanvas.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TCanvasImp.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TF1.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TFormula.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TBits.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TMethodCall.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/list \
+  /usr/local/Cellar/root6/6.06.02/include/root/Math/ParamFunctor.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TF2.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TF12.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TH1F.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TH1.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TAxis.h \
@@ -641,12 +652,6 @@ TSIMC.o: TSIMC.cxx TSIMC.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TStyle.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TColor.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TMultiGraph.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TF1.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TFormula.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TBits.h \
-  /usr/local/Cellar/root6/6.06.02/include/root/TMethodCall.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/list \
-  /usr/local/Cellar/root6/6.06.02/include/root/Math/ParamFunctor.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGraphErrors.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGraph.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TLegend.h \
@@ -686,6 +691,7 @@ TSIMC.o: TSIMC.cxx TSIMC.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGeoBBox.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGeoShape.h \
   /usr/local/Cellar/root6/6.06.02/include/root/TGaxis.h \
+  /usr/local/Cellar/root6/6.06.02/include/root/TRandom3.h \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TCalculations.h \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TAnalysis.h \
   /usr/local/Cellar/root6/6.06.02/include/root/RooGlobalFunc.h \

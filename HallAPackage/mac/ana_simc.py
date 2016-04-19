@@ -82,12 +82,18 @@ if DoEventsFeatures:
 
 
 
+
 if DoCompareEvents:
-    c = plot.CreateCanvas("CompareEvents","Divide",1,1 )
-    c.cd(1)
     #    simc.MergeFiles(FileNumbers[0],FileNumbers[1])
-    simc.CompareVariable("0.01*hsdelta","", FileNumbers[0] , FileNumbers[1] , 100  , -0.4, 0.4, 1e4, "[#Delta #delta(conf. 1) - #Delta #delta(conf. 2)]/#delta(gen.)" , "" )
-    # -0.0025 , 0.0025
+    c = plot.CreateCanvas("CompareEvents","Divide",2,2 )
+    c.cd(1)
+    simc.CompareVariable("hsyptar","", FileNumbers[0] , FileNumbers[1] , 100  , -50, 50,  "#phi_{tag}" , "" )
+    c.cd(2)
+    simc.CompareVariable("hsxptar","", FileNumbers[0] , FileNumbers[1] , 100  , -50, 50, "#theta_{tag}" , "" )
+    c.cd(3)
+    simc.CompareVariable("0.01*hsdelta","", FileNumbers[0] , FileNumbers[1] , 100  , -40, 40, "#delta" , "" )
+    c.cd(4)
+    simc.CompareVariable("hsytar","", FileNumbers[0] , FileNumbers[1] , 100  , -40, 40, "y_{tag}" , "" )
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/CompareEvents.pdf")
