@@ -12,7 +12,8 @@ DoSOSgenerated  = False
 DoSOS           = False
 DoResolution    = False
 DoEventsFeatures= False
-DoCompareEvents = True
+DoCompareEvents = False
+Do2DResolutions = True
 
 
 
@@ -97,4 +98,22 @@ if DoCompareEvents:
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/CompareEvents.pdf")
+
+
+
+if Do2DResolutions:
+    simc.MergeFiles(FileNumbers[0],FileNumbers[1])
+    c = plot.CreateCanvas("CompareEvents","Divide",2,2 )
+    c.cd(1)
+    simc.CompareVariable2D("hsyptar","", FileNumbers[0] , FileNumbers[1] , 100  , -0.004 , 0.004 ,  "#phi_{tag}" , "rad" )
+    c.cd(2)
+    simc.CompareVariable2D("hsxptar","", FileNumbers[0] , FileNumbers[1] , 100  , -0.006 , 0.006 ,  "#theta_{tag}" , "rad" )
+    c.cd(3)
+    simc.CompareVariable2D("0.01*hsdelta","", FileNumbers[0] , FileNumbers[1] , 100  , -0.0015  , 0.0015 ,  "#Delta p / p" , "" )
+    c.cd(4)
+    simc.CompareVariable2D("hsytar","", FileNumbers[0] , FileNumbers[1] , 100  , -0.3   , 0.3 ,  "y_{tag}" , "cm" )
+    c.Update()
+    wait()
+    c.SaveAs(init.dirname()+"/CompareEvents2D.pdf")
+
 

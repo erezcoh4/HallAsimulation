@@ -220,7 +220,10 @@ void TSIMC::MergeFiles( int i1, int i2){
     for (entry = 0; entry < T1->GetEntries() ; entry++) {
         T1 -> GetEntry(entry);
         T2 -> GetEntry(entry);
-        MergedTree  -> Fill();
+        SHOW(hsyptari_1);
+        SHOW(hsyptari_2);
+        SHOW(hsytar_1);
+        SHOW(hsytar_2);
         if (entry%(100000) == 0) {
             Printf("[%.0f%%]",100*((float)entry/T1->GetEntries()));
         }
@@ -235,9 +238,9 @@ void TSIMC::MergeFiles( int i1, int i2){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TH1F* TSIMC::CompareVariable(TString Var, TString cutstr,
-                            int i1, int i2,
-                            int Nbins, double Xlow, double Xup,
-                            TString Title, TString Units){
+                             int i1, int i2,
+                             int Nbins, double Xlow, double Xup,
+                             TString Title, TString Units){
     
     TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
     TString XTitle  = Form("[ #Delta(%s)_{%d} - #Delta(%s)_{%d} ] / %s(gen.) [%%]",Title.Data(),i1,Title.Data(),i2,Title.Data()) ;
@@ -247,7 +250,30 @@ TH1F* TSIMC::CompareVariable(TString Var, TString cutstr,
     TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) , Res2 = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
     TH1F * h        = anaMerged.H1(Form("100.*((%s) - (%s))/%si_%d",Res1.Data(),Res2.Data(),Var.Data(),i1),cut,"HIST e",Nbins ,Xlow ,Xup,Title,XTitle);
     anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , h->GetMaximum() , Form("Mean=%.1f %%" ,h->GetMean()) );
-//    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , 0.8*h->GetMaximum() , Form("RMS=%.1f(%.0f) %%" ,h->GetRMS(),10*h->GetRMSError()) );
+    //    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , 0.8*h->GetMaximum() , Form("RMS=%.1f(%.0f) %%" ,h->GetRMS(),10*h->GetRMSError()) );
+    return h;
+    
+}
+
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+TH2F* TSIMC::CompareVariable2D(TString Var, TString cutstr,
+                             int i1, int i2,
+                             int Nbins, double Xlow, double Xup,
+                             TString Title, TString Units){
+    
+    TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
+    Units           = (Units!=""&&Units!="e-4") ? " [" + Units + "]" : "";
+    TString XT1     = Title + Form("_{%d} - ",i1) + Title + Units;
+    TString XT2     = Title + Form("_{%d} - ",i2) + Title + Units;
+    TCut cut        = Form("%s",cutstr.Data());
+    cut             = cut && Form("ok_spec_%d &&  ok_spec_%d ",i1,i2);
+    //    TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) ;
+    //    TString Res2    = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
+    TString Res1    = Form("%si_%d",Var.Data(),i1) ;
+    TString Res2    = Form("%si_%d",Var.Data(),i2) ;
+    TH2F * h        = anaMerged.H2(Res1,Res2,cut,"colz",Nbins ,Xlow ,Xup,Nbins ,Xlow ,Xup,Title,XT1,XT2);
     return h;
     
 }

@@ -51,8 +51,9 @@ public:
     void           SetCuts ();
 
 
-    void        MergeFiles (int, int);
-    TH1F*  CompareVariable (TString, TString, int, int, int, double, double, TString, TString);
+    void         MergeFiles (int, int);
+    TH1F*   CompareVariable (TString, TString, int, int, int, double, double, TString, TString);
+    TH2F* CompareVariable2D (TString, TString, int, int, int, double, double, TString, TString);
 
 
 
