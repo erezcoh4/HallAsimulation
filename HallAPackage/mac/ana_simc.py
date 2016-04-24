@@ -121,18 +121,21 @@ if Do2DResolutions:
 
 if DoOrResolution:
     anaMerged = TAnalysisSIMC("Merged_%d_%d"%(i1 ,i2))
-    c = plot.CreateCanvas("Res","Divide",2,2 )
+    c = plot.CreateCanvas("Res","Divide",3,1 )
     c.cd(1)
-    simc.DrawRes("hsdelta",100  , -5  , 5     , "#delta"      ,"%" , True )
+    simc.DrawQuantity("hsdelta",100  , -5  , 5     , "#delta p / p"      ,"%" , True ) # hsdelta = DP/P [%]
     c.cd(2)
-    anaMerged.H1("fabs(hsdelta_%d-hsdeltai_%d) / fabs(hsdelta_%d-hsdeltai_%d)"%(i1,i1,i2,i2)
-                 , okYcut , "hist" , 100 , -2 , 5 , "ratio of (rec/gen)" , "|#delta("+Names[0]+")-#delta(gen)| / |#delta("+Names[1]+")-#delta(gen)|"  )
+    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(#delta p(rec) - #delta p(gen))/ p"      ,"%" , True ) # hsdelta = DP/P [%]
+
+#    c.cd(2)
+#    anaMerged.H1("fabs(hsdelta_%d-hsdeltai_%d) / fabs(hsdelta_%d-hsdeltai_%d)"%(i1,i1,i2,i2)
+#                 , okYcut , "hist" , 100 , -2 , 5 , "ratio of (rec/gen)" , "|#delta("+Names[0]+")-#delta(gen)| / |#delta("+Names[1]+")-#delta(gen)|"  )
     c.cd(3)
-    anaMerged.H2("hsdelta_%d"%i1,"hsdelta_%d"%i2 , okYcut , "colz" , 100 , -5 , 5  , 100 , -5 , 5
-                 , "","#delta("+Names[0]+") [%%]", "#delta("+Names[1]+") [%%]" )
-    c.cd(4)
-    anaMerged.H2("hsdelta_%d-hsdeltai_%d"%(i1,i1),"hsdelta_%d-hsdeltai_%d"%(i2,i2) , okYcut , "colz" , 100 , -0.04 , 0.1  , 100 , -0.04 , 0.1
-                 , "",  "#delta("+Names[0]+") - #delta(gen) [%%]", "#delta("+Names[1]+") - #delta(gen) [%%]")
+#    anaMerged.H2("hsdelta_%d"%i1,"hsdelta_%d"%i2 , okYcut , "colz" , 100 , -5 , 5  , 100 , -5 , 5
+#                 , "","#delta("+Names[0]+") [%]", "#delta("+Names[1]+") [%%]" )
+#    c.cd(4)
+    anaMerged.H2("hsdelta_%d-hsdeltai_%d"%(i1,i1),"hsdelta_%d-hsdeltai_%d"%(i2,i2) , okYcut , "colz" , 100 , -0.06  , 0.15  , 100 , -0.06  , 0.15
+                 , "",  "(#deltap("+Names[0]+") - #deltap(gen))/p [%]", "(#deltap("+Names[1]+") - #deltap(gen))/p [%]")
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/Res.pdf")
