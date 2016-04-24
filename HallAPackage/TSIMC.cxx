@@ -115,6 +115,38 @@ void TSIMC::DrawQuantity2D(TString VarX, TString VarY,
 
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void TSIMC::DrawRes(TString Var, int Nbins,double Xlow, double Xup , TString Title, TString Units , bool DoAddLegend){
+    TCut cut = YtagCut && okCut;
+    vector      <float> frac;
+    float       Maximum = 0;
+    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
+    TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
+    TString     XTitle = (Units!="") ? Title + " [" + Units + "]" : Title;
+    
+    
+    for ( int i = 0 ; i < N ; i++ ) {
+        
+        h[i]    = ana[i] -> Res(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,colors[i]);
+        Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
+ 
+    }
+    
+    int BaseLineEntries = h[0] -> GetEntries();
+    for ( int i = 0 ; i < N ; i++ ) {
+        
+        frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
+        h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
+        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+        
+    }
+    
+    if (DoAddLegend){
+        ana[0]->AddLegend(N,h,Labels,"f");
+    }
+}
+
 
 
 
@@ -224,6 +256,7 @@ void TSIMC::MergeFiles( int i1, int i2){
         SHOW(hsyptari_2);
         SHOW(hsytar_1);
         SHOW(hsytar_2);
+        MergedTree -> Fill();
         if (entry%(100000) == 0) {
             Printf("[%.0f%%]",100*((float)entry/T1->GetEntries()));
         }

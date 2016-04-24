@@ -196,6 +196,15 @@ TH1F *  TAnalysisSIMC::Resolution1D(TString var, TCut cut, TString option, int N
 
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+TH1F *  TAnalysisSIMC::Res(TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
+                                , TString Title, TString XTitle, int color){
+    return H1(Form("100*(%s-%si)/%si",var.Data(),var.Data(),var.Data()),cut,option,Nbins,Xlow,Xup
+              ,Form("(%s(rec.)-%s(gen.))/%s(gen.)",Title.Data(),Title.Data(),Title.Data()), Form("#Delta %s/%s(gen.) [%%]",Title.Data(),Title.Data()), "", color);
+}
+
+
+
 
 
 

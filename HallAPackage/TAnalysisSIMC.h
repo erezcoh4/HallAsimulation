@@ -86,8 +86,9 @@ public:
     
     
     // TH1F
-    TH1F *  H1          (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",TString YT="",int c=1);
-    TH1F *  Resolution1D(TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
+    TH1F *           H1 (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",TString YT="",int c=1);
+    TH1F * Resolution1D (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
+    TH1F *          Res (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
     
     
     

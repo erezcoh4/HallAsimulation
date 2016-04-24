@@ -13,7 +13,9 @@ DoSOS           = False
 DoResolution    = False
 DoEventsFeatures= False
 DoCompareEvents = False
-Do2DResolutions = True
+Do2DResolutions = False
+DoMergeFiles    = False
+DoOrResolution  = True
 
 
 
@@ -22,7 +24,6 @@ plot            = TPlots()
 FileNumbers     = (c_int*2)( 5  , 6 ) # c int array
 colors          = (c_int*2)( 6  , 4 )
 Names           = (c_char_p*2)( "configuration 1" , "configuration 2" )
-#N               = len(FileNumbers)
 simc            = TSIMC(len(FileNumbers) , FileNumbers, colors, Names )
 
 
@@ -81,8 +82,8 @@ if DoEventsFeatures:
     wait()
     c.SaveAs(init.dirname()+"/EventsFeatures.pdf")
 
-
-
+if DoMergeFiles:
+    simc.MergeFiles(FileNumbers[0],FileNumbers[1])
 
 if DoCompareEvents:
     #    simc.MergeFiles(FileNumbers[0],FileNumbers[1])
@@ -102,7 +103,6 @@ if DoCompareEvents:
 
 
 if Do2DResolutions:
-    simc.MergeFiles(FileNumbers[0],FileNumbers[1])
     c = plot.CreateCanvas("CompareEvents","Divide",2,2 )
     c.cd(1)
     simc.CompareVariable2D("hsyptar","", FileNumbers[0] , FileNumbers[1] , 100  , -0.004 , 0.004 ,  "#phi_{tag}" , "rad" )
@@ -116,4 +116,20 @@ if Do2DResolutions:
     wait()
     c.SaveAs(init.dirname()+"/CompareEvents2D.pdf")
 
+
+
+if DoOrResolution:
+    c = plot.CreateCanvas("Res","Divide",1,2 )
+    c.cd(1)
+    simc.DrawRes("hsdelta",100  , -5  , 5     , "#delta"      ,"%" , True )
+    c.cd(2)
+    i1 = FileNumbers[0]
+    i2 = FileNumbers[1]
+    anaMerged = TAnalysisSIMC("Merged_%d_%d"%(i1 ,i2))
+    anaMerged.H2("hsdeltai_5","hsdeltai_6" , ROOT.TCut("") , "colz" , 100 , -10 , 10  , 100 , -10 , 10  )
+#    anaMerged.H1("fabs(hsdelta_%d-hsdeltai_%d) / fabs(hsdelta_%d-hsdeltai_%d)"%(i1,i1,i2,i2)
+#                    , ROOT.TCut("(-5 < hsytar_5) && (hsytar_5 < 5) && (-5 < hsytar_6) && (hsytar_6 < 5)  && ok_spec_5 && ok_spec_6 && fabs(hsytari_5-hsytari_6)<0.01") , "hist" , 100 , -2 , 3 , "ratio of (rec.-gen.)" , "|#delta(%d)-#delta(gen.)| / |#delta(%d)-#delta(gen.)|"%(i1 ,i2)  )
+    c.Update()
+    wait()
+    c.SaveAs(init.dirname()+"/Res.pdf")
 
