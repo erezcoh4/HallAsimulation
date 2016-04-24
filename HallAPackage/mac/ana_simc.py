@@ -23,10 +23,11 @@ DoOrResolution  = True
 plot            = TPlots()
 FileNumbers     = (c_int*2)( 5  , 6 ) # c int array
 colors          = (c_int*2)( 6  , 4 )
-Names           = (c_char_p*2)( "configuration 1" , "configuration 2" )
+Names           = (c_char_p*2)( "conf. 1" , "conf. 2" )
 simc            = TSIMC(len(FileNumbers) , FileNumbers, colors, Names )
-
-
+i1 = FileNumbers[0]
+i2 = FileNumbers[1]
+okYcut          = ROOT.TCut("(-5 < hsytar_%d) && (hsytar_%d < 5) && (-5 < hsytar_%d) && (hsytar_%d < 5) && ok_spec_%d && ok_spec_%d"%(i1 ,i1, i2,i2,i1,i2))
 
 if DoSOSgenerated:
     c = plot.CreateCanvas("SOSgenerated","Divide",2,2 )
@@ -119,16 +120,19 @@ if Do2DResolutions:
 
 
 if DoOrResolution:
-    c = plot.CreateCanvas("Res","Divide",1,2 )
+    anaMerged = TAnalysisSIMC("Merged_%d_%d"%(i1 ,i2))
+    c = plot.CreateCanvas("Res","Divide",2,2 )
     c.cd(1)
     simc.DrawRes("hsdelta",100  , -5  , 5     , "#delta"      ,"%" , True )
     c.cd(2)
-    i1 = FileNumbers[0]
-    i2 = FileNumbers[1]
-    anaMerged = TAnalysisSIMC("Merged_%d_%d"%(i1 ,i2))
-    anaMerged.H2("hsdeltai_5","hsdeltai_6" , ROOT.TCut("") , "colz" , 100 , -10 , 10  , 100 , -10 , 10  )
-#    anaMerged.H1("fabs(hsdelta_%d-hsdeltai_%d) / fabs(hsdelta_%d-hsdeltai_%d)"%(i1,i1,i2,i2)
-#                    , ROOT.TCut("(-5 < hsytar_5) && (hsytar_5 < 5) && (-5 < hsytar_6) && (hsytar_6 < 5)  && ok_spec_5 && ok_spec_6 && fabs(hsytari_5-hsytari_6)<0.01") , "hist" , 100 , -2 , 3 , "ratio of (rec.-gen.)" , "|#delta(%d)-#delta(gen.)| / |#delta(%d)-#delta(gen.)|"%(i1 ,i2)  )
+    anaMerged.H1("fabs(hsdelta_%d-hsdeltai_%d) / fabs(hsdelta_%d-hsdeltai_%d)"%(i1,i1,i2,i2)
+                 , okYcut , "hist" , 100 , -2 , 5 , "ratio of (rec/gen)" , "|#delta("+Names[0]+")-#delta(gen)| / |#delta("+Names[1]+")-#delta(gen)|"  )
+    c.cd(3)
+    anaMerged.H2("hsdelta_%d"%i1,"hsdelta_%d"%i2 , okYcut , "colz" , 100 , -5 , 5  , 100 , -5 , 5
+                 , "","#delta("+Names[0]+") [%%]", "#delta("+Names[1]+") [%%]" )
+    c.cd(4)
+    anaMerged.H2("hsdelta_%d-hsdeltai_%d"%(i1,i1),"hsdelta_%d-hsdeltai_%d"%(i2,i2) , okYcut , "colz" , 100 , -0.04 , 0.1  , 100 , -0.04 , 0.1
+                 , "",  "#delta("+Names[0]+") - #delta(gen) [%%]", "#delta("+Names[1]+") - #delta(gen) [%%]")
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/Res.pdf")
