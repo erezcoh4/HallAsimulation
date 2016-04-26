@@ -40,7 +40,7 @@ void TSIMC::DrawQuantity(TString Var, int Nbins,
     TCut cut = YtagCut && okCut;
     vector      <float> frac;
     TString     Labels[sizeof(FileNumbers)/sizeof(int)];
-    float       Maximum = 0;
+    double      Maximum = 0 ,  FWHM[sizeof(FileNumbers)/sizeof(int)];
     TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
     TString     XTitle = (Units!=""&&Units!="e-4") ? Title + " [" + Units + "]" : Title;
     
@@ -57,6 +57,13 @@ void TSIMC::DrawQuantity(TString Var, int Nbins,
         Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
         : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
         h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
+        
+        // FWHM
+        
+        if (DoAddLegend) {
+            FWHM[i] = analysis.GetFWHM(h[i]);
+            ana[0] -> Text(h[i]->GetMean(),h[i]->GetMaximum(),Form("FWHM=%.4f %s",FWHM[i],Units.Data()),colors[i]);
+        }
     }
     
     if (DoAddCuts) {

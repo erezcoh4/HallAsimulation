@@ -26,7 +26,7 @@ class TSIMC{
     
 public:
     
-    
+    TAnalysis   analysis;
     TCut okCut , YtagCut;
     TAnalysisSIMC * ana[10];
     vector      <TString> Names;

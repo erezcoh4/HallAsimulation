@@ -123,9 +123,9 @@ if DoOrResolution:
     h2.GetYaxis().SetTitleOffset(1.4)
 
     c.cd(3)
-#    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(p(rec) - p(gen))/ p"      ,"%" ) # hsdelta = DP/P [%]
+    #    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(p(rec) - p(gen))/ p"      ,"%" ) # hsdelta = DP/P [%]
     # hsdelta = P(rec)/P - 1 -> (P=1.0 GeV/c) -> P(rec) = (1.0 GeV/c) x (hsdelta + 1)
-    simc.DrawQuantity("((hsdelta+1) - (hsdeltai+1)) / (hsdeltai+1)",100  , -0.06  , 0.06     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
+    simc.DrawQuantity("((hsdelta+1) - (hsdeltai+1)) / (hsdeltai+1)",1000  , -0.06  , 0.06     , "(p(rec) - p(gen))/ p(gen)"      ,"" , True)
     c.cd(4)
     simc.DrawQuantity("((hsdelta+1) - (hsdeltai+1)) / (hsdeltai+1)",100  , -0.06  , 0.06     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
 #    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(p(rec) - p(gen))/ p"      ,"%" , True ) # hsdelta = DP/P [%]
