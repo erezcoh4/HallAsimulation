@@ -43,7 +43,6 @@ if DoSOSgenerated:
     wait()
     c.SaveAs(init.dirname()+"/SOSgenerated.pdf")
 
-
 if DoSOS:
     c = plot.CreateCanvas("SOS","Divide",2,2 )
     c.cd(1)
@@ -58,7 +57,6 @@ if DoSOS:
     wait()
     c.SaveAs(init.dirname()+"/SOS.pdf")
 
-
 if DoResolution:
     cRes = plot.CreateCanvas("Resolutions","Divide",2,2 )
     cRes.cd(1)
@@ -72,8 +70,6 @@ if DoResolution:
     cRes.Update()
     wait()
     cRes.SaveAs(init.dirname()+"/ResolutionsLogScaleYtg5cm.pdf")
-
-
 
 if DoEventsFeatures:
     c = plot.CreateCanvas("EventsFeatures","Divide",1,1 )
@@ -101,8 +97,6 @@ if DoCompareEvents:
     wait()
     c.SaveAs(init.dirname()+"/CompareEvents.pdf")
 
-
-
 if Do2DResolutions:
     c = plot.CreateCanvas("CompareEvents","Divide",2,2 )
     c.cd(1)
@@ -121,21 +115,23 @@ if Do2DResolutions:
 
 if DoOrResolution:
     anaMerged = TAnalysisSIMC("Merged_%d_%d"%(i1 ,i2))
-    c = plot.CreateCanvas("Res","Divide",3,1 )
+    c = plot.CreateCanvas("Res","Divide",2,2 )
     c.cd(1)
-    simc.DrawQuantity("hsdelta",100  , -5  , 5     , "#delta p / p"      ,"%" , True ) # hsdelta = DP/P [%]
+    simc.DrawQuantity("hsdelta",30  , -6  , 6     , "#delta p / p"      ,"%" ) # hsdelta = DP/P [%]
     c.cd(2)
-    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(#delta p(rec) - #delta p(gen))/ p"      ,"%" , True ) # hsdelta = DP/P [%]
+    h2 = anaMerged.H2("(hsdelta_%d-hsdeltai_%d)/(hsdeltai_%d+1)"%(i1,i1,i1),"(hsdelta_%d-hsdeltai_%d)/(hsdeltai_%d+1)"%(i2,i2,i2) , okYcut , "colz" , 100 , -0.06  , 0.15  , 100 , -0.06  , 0.15 , "",  "(p("+Names[0]+") - p(gen))/p(gen)", "(p("+Names[1]+") - p(gen))/p(gen)")
+    h2.GetYaxis().SetTitleOffset(1.4)
 
-#    c.cd(2)
-#    anaMerged.H1("fabs(hsdelta_%d-hsdeltai_%d) / fabs(hsdelta_%d-hsdeltai_%d)"%(i1,i1,i2,i2)
-#                 , okYcut , "hist" , 100 , -2 , 5 , "ratio of (rec/gen)" , "|#delta("+Names[0]+")-#delta(gen)| / |#delta("+Names[1]+")-#delta(gen)|"  )
     c.cd(3)
-#    anaMerged.H2("hsdelta_%d"%i1,"hsdelta_%d"%i2 , okYcut , "colz" , 100 , -5 , 5  , 100 , -5 , 5
-#                 , "","#delta("+Names[0]+") [%]", "#delta("+Names[1]+") [%%]" )
-#    c.cd(4)
-    anaMerged.H2("hsdelta_%d-hsdeltai_%d"%(i1,i1),"hsdelta_%d-hsdeltai_%d"%(i2,i2) , okYcut , "colz" , 100 , -0.06  , 0.15  , 100 , -0.06  , 0.15
-                 , "",  "(#deltap("+Names[0]+") - #deltap(gen))/p [%]", "(#deltap("+Names[1]+") - #deltap(gen))/p [%]")
+#    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(p(rec) - p(gen))/ p"      ,"%" ) # hsdelta = DP/P [%]
+    # hsdelta = P(rec)/P - 1 -> (P=1.0 GeV/c) -> P(rec) = (1.0 GeV/c) x (hsdelta + 1)
+    simc.DrawQuantity("((hsdelta+1) - (hsdeltai+1)) / (hsdeltai+1)",100  , -0.06  , 0.06     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
+    c.cd(4)
+    simc.DrawQuantity("((hsdelta+1) - (hsdeltai+1)) / (hsdeltai+1)",100  , -0.06  , 0.06     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
+#    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(p(rec) - p(gen))/ p"      ,"%" , True ) # hsdelta = DP/P [%]
+#    ROOT.gPad.GetYaxis().SetRangeUser(1,gPad.GetYaxis().GetXmax())
+#    ROOT.gPad.SetLogy()
+
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/Res.pdf")
