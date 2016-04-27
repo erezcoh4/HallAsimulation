@@ -21,10 +21,10 @@ DoOrResolution  = True
 
 
 plot            = TPlots()
-FileNumbers     = (c_int*2)( 5  , 6 ) # c int array
+FileNumbers     = (c_int*2)( 9  , 8 ) # c int array
 colors          = (c_int*2)( 6  , 4 )
 Names           = (c_char_p*2)( "conf. 1" , "conf. 2" )
-simc            = TSIMC(len(FileNumbers) , FileNumbers, colors, Names )
+simc            = TSIMC(len(FileNumbers) , FileNumbers, colors, Names ) 
 i1 = FileNumbers[0]
 i2 = FileNumbers[1]
 okYcut          = ROOT.TCut("(-5 < hsytar_%d) && (hsytar_%d < 5) && (-5 < hsytar_%d) && (hsytar_%d < 5) && ok_spec_%d && ok_spec_%d"%(i1 ,i1, i2,i2,i1,i2))
@@ -115,22 +115,23 @@ if Do2DResolutions:
 
 if DoOrResolution:
     anaMerged = TAnalysisSIMC("Merged_%d_%d"%(i1 ,i2))
-    c = plot.CreateCanvas("Res","Divide",2,2 )
+    c = plot.CreateCanvas("Res","Divide",2,3 )
     c.cd(1)
     simc.DrawQuantity("hsdelta",30  , -6  , 6     , "#delta p / p"      ,"%" ) # hsdelta = DP/P [%]
     c.cd(2)
-    h2 = anaMerged.H2("(hsdelta_%d-hsdeltai_%d)/(hsdeltai_%d+1)"%(i1,i1,i1),"(hsdelta_%d-hsdeltai_%d)/(hsdeltai_%d+1)"%(i2,i2,i2) , okYcut , "colz" , 100 , -0.06  , 0.15  , 100 , -0.06  , 0.15 , "",  "(p("+Names[0]+") - p(gen))/p(gen)", "(p("+Names[1]+") - p(gen))/p(gen)")
+    h2 = anaMerged.H2("(hsdelta_%d-hsdeltai_%d)/(hsdeltai_%d+100)"%(i1,i1,i1),"(hsdelta_%d-hsdeltai_%d)/(hsdeltai_%d+100)"%(i2,i2,i2) , okYcut , "colz" , 200  , -0.001  , 0.001  , 200  , -0.001  , 0.001 , "",  "(p("+Names[0]+") - p(gen))/p(gen)", "(p("+Names[1]+") - p(gen))/p(gen)")
     h2.GetYaxis().SetTitleOffset(1.4)
 
+    # hsdelta = P(rec)/P - 100% -> (P=1.0 GeV/c) -> P(rec) = (1.0 GeV/c) x (hsdelta + 100)
     c.cd(3)
-    #    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(p(rec) - p(gen))/ p"      ,"%" ) # hsdelta = DP/P [%]
-    # hsdelta = P(rec)/P - 1 -> (P=1.0 GeV/c) -> P(rec) = (1.0 GeV/c) x (hsdelta + 1)
-    simc.DrawQuantity("((hsdelta+1) - (hsdeltai+1)) / (hsdeltai+1)",1000  , -0.06  , 0.06     , "(p(rec) - p(gen))/ p(gen)"      ,"" , True)
+    simc.DrawQuantity("(hsdelta - hsdeltai) / (hsdeltai+100)",200  , -0.001  , 0.001     , "(p(rec) - p(gen))/ p(gen)"      ,"" , True)
     c.cd(4)
-    simc.DrawQuantity("((hsdelta+1) - (hsdeltai+1)) / (hsdeltai+1)",100  , -0.06  , 0.06     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
-#    simc.DrawQuantity("hsdelta - hsdeltai",100  , -0.06  , 0.15     , "(p(rec) - p(gen))/ p"      ,"%" , True ) # hsdelta = DP/P [%]
-#    ROOT.gPad.GetYaxis().SetRangeUser(1,gPad.GetYaxis().GetXmax())
-#    ROOT.gPad.SetLogy()
+    simc.DrawQuantity("(hsdelta - hsdeltai) / (hsdeltai+100)",200  , -0.001  , 0.001     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
+    
+    c.cd(5)
+    simc.DrawQuantity("(hsdelta - hsdeltai) / (hsdeltai+100)",50  , -0.0001  , 0.0001     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
+    c.cd(6)
+    simc.DrawQuantity("(hsdelta - hsdeltai) / (hsdeltai+100)",50  , -0.0001  , 0.0001     , "(p(rec) - p(gen))/ p(gen)"      ,"" )
 
     c.Update()
     wait()

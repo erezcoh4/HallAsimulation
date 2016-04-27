@@ -49,6 +49,12 @@ void TSIMC::DrawQuantity(TString Var, int Nbins,
         h[i]    = ana[i]->H1(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,"",colors[i]);
         Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
         
+        // FWHM
+        if (DoAddLegend) {
+            FWHM[i] = analysis.GetFWHM(h[i]);
+            ana[0] -> Text(h[i]->GetMean(),h[i]->GetMaximum(),Form("FWHM=%.5f %s",FWHM[i],Units.Data()),colors[i]);
+        }
+       
     }
     
     int BaseLineEntries = h[0] -> GetEntries();
@@ -58,12 +64,6 @@ void TSIMC::DrawQuantity(TString Var, int Nbins,
         : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
         h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
         
-        // FWHM
-        
-        if (DoAddLegend) {
-            FWHM[i] = analysis.GetFWHM(h[i]);
-            ana[0] -> Text(h[i]->GetMean(),h[i]->GetMaximum(),Form("FWHM=%.4f %s",FWHM[i],Units.Data()),colors[i]);
-        }
     }
     
     if (DoAddCuts) {
@@ -260,9 +260,16 @@ void TSIMC::MergeFiles( int i1, int i2){
         T1 -> GetEntry(entry);
         T2 -> GetEntry(entry);
         SHOW(hsyptari_1);
+        SHOW(hsxptari_1);
+        SHOW(hsdeltai_1);
+        SHOW(hsytari_1);
         SHOW(hsyptari_2);
+        SHOW(hsxptari_2);
+        SHOW(hsdeltai_2);
+        SHOW(hsytari_2);
         SHOW(hsytar_1);
         SHOW(hsytar_2);
+        PrintLine();
         MergedTree -> Fill();
         if (entry%(100000) == 0) {
             Printf("[%.0f%%]",100*((float)entry/T1->GetEntries()));
