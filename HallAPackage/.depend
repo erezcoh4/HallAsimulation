@@ -127,6 +127,7 @@ TAnalysisSIMC.o: TAnalysisSIMC.cxx TAnalysisSIMC.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/bitset \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__bit_reference \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TPlots.h \
+  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/myIncludes.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iomanip \
   /usr/include/math.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector \
@@ -295,8 +296,6 @@ TAnalysisSIMC.o: TAnalysisSIMC.cxx TAnalysisSIMC.h \
   /Users/erezcohen/root-v5-34/include/root/TGeoShape.h \
   /Users/erezcohen/root-v5-34/include/root/TGaxis.h \
   /Users/erezcohen/root-v5-34/include/root/TRandom3.h \
-  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TCalculations.h \
-  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TAnalysis.h \
   /Users/erezcohen/root-v5-34/include/root/RooGlobalFunc.h \
   /Users/erezcohen/root-v5-34/include/root/RooCmdArg.h \
   /Users/erezcohen/root-v5-34/include/root/RooLinkedList.h \
@@ -368,7 +367,9 @@ TAnalysisSIMC.o: TAnalysisSIMC.cxx TAnalysisSIMC.h \
   /Users/erezcohen/root-v5-34/include/root/RooAbsCategoryLValue.h \
   /Users/erezcohen/root-v5-34/include/root/RooMinuit.h \
   /Users/erezcohen/root-v5-34/include/root/RooPlot.h \
-  /Users/erezcohen/root-v5-34/include/root/RooList.h
+  /Users/erezcohen/root-v5-34/include/root/RooList.h \
+  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TCalculations.h \
+  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TAnalysis.h
 TSIMC.o: TSIMC.cxx TSIMC.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iostream \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__config \
@@ -499,6 +500,7 @@ TSIMC.o: TSIMC.cxx TSIMC.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/__bit_reference \
   TAnalysisSIMC.h \
   /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TPlots.h \
+  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/myIncludes.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/iomanip \
   /usr/include/math.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/vector \
@@ -667,8 +669,6 @@ TSIMC.o: TSIMC.cxx TSIMC.h \
   /Users/erezcohen/root-v5-34/include/root/TGeoShape.h \
   /Users/erezcohen/root-v5-34/include/root/TGaxis.h \
   /Users/erezcohen/root-v5-34/include/root/TRandom3.h \
-  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TCalculations.h \
-  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TAnalysis.h \
   /Users/erezcohen/root-v5-34/include/root/RooGlobalFunc.h \
   /Users/erezcohen/root-v5-34/include/root/RooCmdArg.h \
   /Users/erezcohen/root-v5-34/include/root/RooLinkedList.h \
@@ -740,4 +740,6 @@ TSIMC.o: TSIMC.cxx TSIMC.h \
   /Users/erezcohen/root-v5-34/include/root/RooAbsCategoryLValue.h \
   /Users/erezcohen/root-v5-34/include/root/RooMinuit.h \
   /Users/erezcohen/root-v5-34/include/root/RooPlot.h \
-  /Users/erezcohen/root-v5-34/include/root/RooList.h
+  /Users/erezcohen/root-v5-34/include/root/RooList.h \
+  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TCalculations.h \
+  /Users/erezcohen/larlite/UserDev/mySoftware/MySoftwarePackage/TAnalysis.h

@@ -50,9 +50,9 @@ public:
 
     
     TAnalysisSIMC (){};
-    TAnalysisSIMC (int filenumber, TString target, int beamdays = 1,float simcQ = 90, float i = 25); // two arms
-    TAnalysisSIMC (int filenumber);    // single arm
-    TAnalysisSIMC (TString fFileName);     // single arm
+    TAnalysisSIMC (int filenumber, TString target, int beamdays = 1,float simcQ = 1, float i = 25); // two arms
+    TAnalysisSIMC (int filenumber);         // single arm
+    TAnalysisSIMC (TString fFileName);      // single arm
     ~TAnalysisSIMC (){};
 
     
@@ -75,7 +75,7 @@ public:
     void           SetExpType ( TString etype ) {ExpType = etype;};
     
     
-    void           SetGlobals ();
+    void           SetGlobals (TString s = "HRS");
     void           SetAliases ();
     void          SetNormFact ();
     
