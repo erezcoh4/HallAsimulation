@@ -36,5 +36,5 @@ if Operation=="Draw Variable":
 
     c.Update()
     wait()
-    c.SaveAs(init.dirname()+"/deep_hallc_"+Variable+".pdf")
+    c.SaveAs(init.dirname()+"/run"+Variable+".pdf")
 
