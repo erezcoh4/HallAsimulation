@@ -10,31 +10,40 @@ init.createnewdir()
 
 Operation   = "Draw Variable"
 Variable    = "Q2"
-Nbins       = 100
+Nbins       = 150
 
 if len(sys.argv)>1:
     run     = int(sys.argv[1])
+    ana = TAnalysisSIMC( run  , "D" )
 else:
-    print "run: \n> python mac/ana_deep_hallc.py <run number>\n"
-    exit(0)
+    run     = 0
+    print "run: \n> python mac/ana_deep_hallc.py <run number>\n or for all > python mac/ana_deep_hallc.py"
 
-
-
-
-ana = TAnalysisSIMC( run  , "D" )
-
-
+plot   = TPlots()
+anaAll = []
+Kinematics = {1:"K11" , 2:"K12" , 3:"K13" ,4:"K21" , 5:"K22" , 6:"K23"}
+#for run,name in Kinematics.items():
+for run in Kinematics:
+    anaAll.append(TAnalysisSIMC( run  , "D" ))
+    print run,Kinematics[run]
 
 
 if Operation=="Draw Variable":
-    c = ana.CreateCanvas(Variable)
+    c = plot.CreateCanvas(Variable)
     
     if (Variable=="Q2"):
-        xAxis = [Variable , 0 , 4, "Q^{2} (GeV/c)^{2}"]
+        xAxis = [Variable , 1.5 , 5, "Q^{2} (GeV/c)^{2}"]
     
-    ana.H1(xAxis[0] , ROOT.TCut() , "BAR E" , Nbins , xAxis[1] , xAxis[2] , "",xAxis[3])
+    
+    
+    c = plot.CreateCanvas(Variable,"Divide",3,2)
+#    for run,name in Kinematics.items():
+    i=0
+    for run in Kinematics:
+        c.cd(i+1)
+        anaAll[i].H1(xAxis[0] , ROOT.TCut() , "BAR E" , Nbins , xAxis[1] , xAxis[2] , Kinematics[run] ,xAxis[3] , "" ,38)
+        i=i+1
 
     c.Update()
     wait()
-    c.SaveAs(init.dirname()+"/run"+Variable+".pdf")
-
+    c.SaveAs(init.dirname()+"/run%d"%run+"_"+Variable+".pdf")
