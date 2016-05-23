@@ -97,7 +97,7 @@ void TSIMC::DrawQuantity2D(TString VarX, TString VarY,
     
     for ( int i = 0 ; i < N ; i++ ) {
         
-        h2[i]   = ana[i]->H2(VarX, VarY,cut,(i==0)?"":"same",NbinsX ,Xlow ,Xup,NbinsY ,Ylow ,Yup ,Title ,XTitle ,YTitle ,colors[i], 20, 0.9 , 1);
+        h2[i]   = ana[i]->TPlots::H2(VarX, VarY,cut,(i==0)?"":"same",NbinsX ,Xlow ,Xup,NbinsY ,Ylow ,Yup ,Title ,XTitle ,YTitle ,colors[i], 20, 0.9 , 1);
     }
     
     int BaseLineEntries = h2[0] -> GetEntries();

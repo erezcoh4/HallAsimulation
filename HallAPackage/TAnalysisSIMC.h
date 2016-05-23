@@ -37,7 +37,8 @@ public:
     float   NormFac  , SIMCQ , totweights , I;
     int     BeamDays;
     TString ExpType;
-    
+    Float_t E0 , Pe , The , Pp , Thp;
+    Float_t yield;
     
     
     
@@ -50,7 +51,9 @@ public:
 
     
     TAnalysisSIMC (){};
-    TAnalysisSIMC (int filenumber, TString target, int beamdays = 1,float simcQ = 1, float i = 25); // two arms
+//    TAnalysisSIMC (int filenumber, TString target, int beamdays = 100,float simcQ = 1, float i = 25); // two arms
+    TAnalysisSIMC (int filenumber, TString target, int beamdays = 100,float simcQ = 1, float i = 25, float fE0 = 1 , Float_t fPe = 1 , Float_t fThe = 10, Float_t fPp = 1 , Float_t fThp = 10); // two arms
+    
     TAnalysisSIMC (int filenumber);         // single arm
     TAnalysisSIMC (TString fFileName);      // single arm
     ~TAnalysisSIMC (){};
@@ -58,7 +61,7 @@ public:
     
     // GETs
     TString           GetPath (){return Path;};
-    
+    Float_t          GetYield (){return yield;};
     
     
     // SETs
@@ -87,6 +90,12 @@ public:
     
     // TH1F
     TH1F *           H1 (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",TString YT="",int c=1);
+
+    TH2F *           H2 (TString,TString, TCut, TString
+                         , int NbinsX, double Xlow, double Xup, int NbinsY, double Ylow, double Yup
+                         , TString T="", TString XT="", TString YT="", int c=1);
+
+    
     TH1F * Resolution1D (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
     TH1F *          Res (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
     

@@ -11,7 +11,9 @@
 
 #pragma link C++ class TSIMC+;
 #pragma link C++ class TAnalysisSIMC+;
+#pragma link C++ class TCalcSIMC+;
 //ADD_NEW_CLASS ... do not change this line
 #endif
+
 
 
