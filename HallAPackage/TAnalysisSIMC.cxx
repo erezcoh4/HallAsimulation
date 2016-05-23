@@ -31,8 +31,6 @@ TPlots(Form("$SIMCFiles/data/run%d.root",fFileNumber),"h666",Form("run%d",fFileN
     SetNormFact     ();
 }
 
-
-
 // single arm
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TAnalysisSIMC::TAnalysisSIMC(int fFileNumber)
@@ -48,7 +46,6 @@ TAnalysisSIMC::TAnalysisSIMC(int fFileNumber)
     
 }
 
-
 // single arm - from a different file name (e.g. merged) - April 15,2016
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TAnalysisSIMC::TAnalysisSIMC(TString fFileName)
@@ -63,13 +60,6 @@ TAnalysisSIMC::TAnalysisSIMC(TString fFileName)
     
 }
 
-
-
-
-
-
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void TAnalysisSIMC::SetGlobals(TString Spectrometers){
     
@@ -80,12 +70,6 @@ void TAnalysisSIMC::SetGlobals(TString Spectrometers){
     Nentries    = Tree -> GetEntries();
     totweights  = GetBranchSum((ExpType=="SingleArm")?"ok_spec":"Weight","");
 }
-
-
-
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void TAnalysisSIMC::SetNormFact(){
@@ -133,10 +117,6 @@ void TAnalysisSIMC::SetNormFact(){
 }
 
 
-
-
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void TAnalysisSIMC::SetAliases(){
     SetAlias("Ysieve",Form("hsytar+%f*hsyptar",L));
@@ -169,12 +149,6 @@ void TAnalysisSIMC::SetAliases(){
 
 
 
-
-
-
-
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TH1F *  TAnalysisSIMC::H1 (TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
                            , TString Title, TString XTtitle, TString YTitle, int color){
@@ -182,9 +156,6 @@ TH1F *  TAnalysisSIMC::H1 (TString var, TCut cut, TString option, int Nbins, dou
     if(ExpType!="SingleArm") ScaleToYield(h,true);
     return h;
 }
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TH2F *  TAnalysisSIMC::H2 (TString varX,TString varY, TCut cut, TString option
@@ -210,7 +181,7 @@ void TAnalysisSIMC::ScaleToYield(TH1F * h,bool DoPrint){
     //    h -> Scale( (Target == "D") ? (NormFac / Nentries) * (Q/1.5) :  (NormFac / Nentries) * Q)  ; // Hall-A (A=3) scaling of 3/2
     float ScaleFactor = ( NormFac / Nentries ) * ((float)h->GetEntries()/Nentries) ;
     h -> Scale( yield/(h->GetEntries()) )  ;
-    h -> GetYaxis() -> SetRangeUser(0,1.1*h->GetMaximum());
+    if (typeid(h)==typeid(TH1F)) h -> GetYaxis() -> SetRangeUser(0,1.1*h->GetMaximum());
     
     if(DoPrint){
         Printf("for beam charge of %.1f mC:",Q);

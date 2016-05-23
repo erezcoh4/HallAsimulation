@@ -7,31 +7,71 @@ import ROOT
 from ROOT import TString, TPlots, TAnalysisSIMC , TSIMC
 from rootpy.interactive import wait
 init.createnewdir()
+plot    = TPlots()
+
 
 Operation   = "proton-Pmiss Plots"
-
-E0      = 11.0
-Pe_cent = 9.85
-The_cent= 10.0
-Pp_cent = 1.83
-Thp_cent= 43.7
 Nbins   = 50
-plot    = TPlots()
+
 
 
 
 if len(sys.argv)>1:
     run     = int(sys.argv[1])
-    ana     = TAnalysisSIMC( run  , "D" , 1 , 1000 , 20, E0 , Pe_cent , The_cent, Pp_cent, Thp_cent)
     if len(sys.argv)>2:
         cutname= sys.argv[2]
     if len(sys.argv)>3:
         Variable= sys.argv[3]
 
+if run == 16: # 11 GeV
+    E0      = 11.0
+    Pe_cent = 9.85
+    The_cent= 10.0
+    Pp_cent = 1.83
+    Thp_cent= 43.7
+elif run == 20: # 8.8 GeV
+    E0      = 8.8
+    Pe_cent = 7.87
+    The_cent= 11.4
+    Pp_cent = 1.58
+    Thp_cent= 42.2
+elif run == 21: # 8.8 GeV
+    E0      = 8.8
+    Pe_cent = 8.2
+    The_cent= 10.0
+    Pp_cent = 1.58
+    Thp_cent= 42.2
+elif run == 22: # 8.8 GeV
+    E0      = 8.8
+    Pe_cent = 8.03
+    The_cent= 10.4
+    Pp_cent = 1.39
+    Thp_cent= 39.9
+elif run == 23: # 11 GeV
+    E0      = 11
+    Pe_cent = 9.0
+    The_cent= 10.0
+    Pp_cent = 1.83
+    Thp_cent= 43.7
+
+
+
+ana     = TAnalysisSIMC( run  , "D" , 1 , 1000 , 20, E0 , Pe_cent , The_cent, Pp_cent, Thp_cent)
+
+
+Pp_Selected = 2.1
+
+Theta_p_Selected = 41.5
+
+
+
 
 
 if cutname == "NoCut":
     cut = ROOT.TCut("Weight")
+
+elif cutname == "success no weight":
+    cut = ROOT.TCut("Weight && success")
 
 elif cutname == "success":
     cut = ROOT.TCut("Weight && success")
@@ -39,21 +79,15 @@ elif cutname == "success":
 elif cutname == "Q^{2}-x_{B}":
     cut = ROOT.TCut("Weight && (2.5 < Q2) && (1.3 < Q2/(2*0.938*nu))")
 
-elif cutname == "Q^{2}-x_{B}-success":
+elif cutname == "Q^{2}-x_{B}-SHMS_{e}":
     cut = ROOT.TCut("Weight && success && (2.5 < Q2) && (1.3 < Q2/(2*0.938*nu))")
 
-elif cutname == "Q^{2}-x_{B}-SHMS_{e}":
-    cut = ROOT.TCut("Weight && (2.5 < Q2) && (1.3 < Q2/(2*0.938*nu)) && (8.5<Theta_e && Theta_e<11.5) && (9.1<Pe && Pe<9.8)")
 
 elif cutname == "Q^{2}-x_{B}-SHMS_{e}-HMS_{p}":
-    cut = ROOT.TCut("Weight && (2.5 < Q2) && (1.3 < Q2/(2*0.938*nu)) && (success) && (fabs(Theta_p-41.5) < 1.6) && (fabs(Pp - 2.1) < 0.21)")
+    cut = ROOT.TCut("Weight && (2.5 < Q2) && (1.3 < Q2/(2*0.938*nu)) && (success) && (fabs(Theta_p-%f) < 1.6) && (fabs(Pp - %f) < %f)"%(Theta_p_Selected,Pp_Selected,0.1*Pp_Selected))
 
 elif cutname == "Q^{2}-x_{B}-p_{miss}-#theta_{rq}":
     cut = ROOT.TCut("Weight && (theta_rq<40) && (2.5 < Q2) && (1.3 < Q2/(2*0.938*nu)) && (0.350<Pm)")
-
-
-elif cutname == "Q^{2}-x_{B}-p_{miss}-#theta_{rq}-SHMS_{e}":
-    cut = ROOT.TCut("Weight && (theta_rq<40) && (2.5 < Q2) && (1.3 < Q2/(2*0.938*nu)) && (0.350<Pm) && (8.5<Theta_e && Theta_e<11.5) && (9.1<Pe && Pe<9.8)")
 
 else:
     cut = ROOT.TCut()
@@ -74,11 +108,11 @@ if Operation=="proton-Pmiss Plots":
     c.cd(3)
     ana.H2("Theta_p" , "Pm"     , cut , "colz" , Nbins , 20  , 70 , Nbins , 0 , 0.8 , "run %d"%run , "#theta_{p} [deg.]", "|p_{miss}| [GeV/c]" )
     c.cd(4)
-    ana.H2("Pe"      , "Theta_e", cut , "colz" , Nbins , 8 , 12, Nbins , 6 , 13 , "run %d"%run , "|p_{e}| [GeV/c]"  , "#theta_{e} [deg.]" )
+    ana.H2("Pe"      , "Theta_e", cut , "colz" , Nbins , 0.9*Pe_cent , 1.1*Pe_cent , Nbins , 0.8*The_cent , 1.3*The_cent , "run %d"%run , "|p_{e}| [GeV/c]"  , "#theta_{e} [deg.]" )
     c.cd(5)
     ana.H1("theta_rq", cut , "hist" , Nbins , 0 , 180, "run %d"%run , "#theta_{rq} [deg.]" , "" , 38)
     c.cd(6)
-    ana.H1("Q2", cut , "hist" , Nbins , 2 , 5, "run %d"%run , "Q ^{2}  (GeV/c)  ^{2}" , "" , 38)
+    ana.H1("Q2", cut , "hist" , Nbins , 1 , 5, "run %d"%run , "Q ^{2}  (GeV/c)  ^{2}" , "" , 38)
     c.cd(7)
     ana.H1("Q2/(2*0.938*nu)", cut , "hist" , Nbins , 0 , 3, "run %d"%run , "Bjorken x" , "" , 38)
     c.cd(8)
@@ -87,7 +121,7 @@ if Operation=="proton-Pmiss Plots":
 
     c.Update()
     wait()
-    c.SaveAs(init.dirname()+"/"+cutname+".pdf")
+    c.SaveAs(init.dirname()+"/run%d"%run+"_"+cutname+".pdf")
 
 
 
