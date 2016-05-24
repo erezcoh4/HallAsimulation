@@ -34,10 +34,10 @@ public:
     // globals
     float   L     ;    // L is the distance from Hall center to the sieve plane
     int     Nentries;
-    float   NormFac  , SIMCQ , totweights , I;
-    int     BeamDays;
+    float   NormFac     , SIMCQ , totweights, I;
+    int     BeamDays    , run ;
     TString ExpType;
-    Float_t E0 , Pe , The , Pp , Thp;
+    Float_t E0          , Pe    , The       , Pp    , Thp;
     Float_t yield;
     
     
@@ -52,7 +52,10 @@ public:
     
     TAnalysisSIMC (){};
 //    TAnalysisSIMC (int filenumber, TString target, int beamdays = 100,float simcQ = 1, float i = 25); // two arms
-    TAnalysisSIMC (int filenumber, TString target, int beamdays = 100,float simcQ = 1, float i = 25, float fE0 = 1 , Float_t fPe = 1 , Float_t fThe = 10, Float_t fPp = 1 , Float_t fThp = 10); // two arms
+    TAnalysisSIMC (int filenumber, TString target, int beamdays ,float simcQ , float i = 25, float fE0 = 1 , Float_t fPe = 1 , Float_t fThe = 10, Float_t fPp = 1 , Float_t fThp = 10); // two arms
+    
+    TAnalysisSIMC (int run_number, TString target);
+    
     
     TAnalysisSIMC (int filenumber);         // single arm
     TAnalysisSIMC (TString fFileName);      // single arm

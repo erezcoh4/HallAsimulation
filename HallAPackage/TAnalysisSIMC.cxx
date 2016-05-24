@@ -5,6 +5,25 @@
 
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+TAnalysisSIMC::TAnalysisSIMC (int run_number, TString target):
+TPlots(Form("$SIMCFiles/data/run%d.root",run_number),"h666",Form("run%d",run_number),false){
+
+    run = run_number;
+    SetPath         ("/Users/erezcohen/Desktop/A3/Simulation/simc_files/");
+    SetInFileName   ( Form("run%d",run_number) );
+    SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
+    SetTree         ((TTree*) InFile->Get( "h666" ));
+    SetTarget       ( target );
+    SetExpType      ( "TwoArmsCoincidence" );
+    SetGlobals      ();
+    SetAliases      ();
+    SetNormFact     ();
+    
+}
+
+
+
 // two arms
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, TString target, int beamdays , float simcQ, float i, Float_t fE0, Float_t fPe, Float_t fThe, Float_t fPp, Float_t fThp):
@@ -69,6 +88,64 @@ void TAnalysisSIMC::SetGlobals(TString Spectrometers){
         L = 0;
     Nentries    = Tree -> GetEntries();
     totweights  = GetBranchSum((ExpType=="SingleArm")?"ok_spec":"Weight","");
+    
+    
+    ifstream InFile;
+    InFile.open(Path+"/Kinematics");
+    string word     = Form("run%d",run);  //this array will save user input
+    int array_size  = 10024; // define the size of character array
+    int position    = 0; //this will be used incremently to fill characters in the array
+    char * array    = new char[array_size];
+    char * tmp_arr  = new char[10];
+    if (InFile.is_open()) {
+        while(!InFile.eof() && position < array_size) {
+            InFile.get(array[position]); //reading one character from file to array
+            position++;
+        }
+        array[position-1] = '\0'; //placing character array terminating character
+        //this loop is searching for the word in the array
+        for(int i = 0; array[i] != '\0'; i++)  {
+            for(int j = 0; j < word.size() ; j++) {
+                if(array[i] != word[j]) { break; }
+                else {
+                    i++;
+                    if(word[j+1] == '\0') {
+                        
+                        for (int k = i-word.size()+6 ; k < i-word.size() + 11 ; k++)
+                            tmp_arr[k-(i-word.size()+6)] = array[k];
+                        SIMCQ      = atof(tmp_arr);
+                        
+                        for (int k = i-word.size()+11 ; k < i-word.size() + 15 ; k++)
+                            tmp_arr[k-(i-word.size()+11)] = array[k];
+                        E0      = atof(tmp_arr);
+
+                        for (int k = i-word.size()+15 ; k < i-word.size() + 20 ; k++)
+                            tmp_arr[k-(i-word.size()+15)] = array[k];
+                        Pe      = atof(tmp_arr);
+                        
+                        for (int k = i-word.size()+20 ; k < i-word.size() + 25 ; k++)
+                            tmp_arr[k-(i-word.size()+20)] = array[k];
+                        The      = atof(tmp_arr);
+                        
+                        for (int k = i-word.size()+25 ; k < i-word.size() + 30 ; k++)
+                            tmp_arr[k-(i-word.size()+25)] = array[k];
+                        Pp      = atof(tmp_arr);
+                        
+                        for (int k = i-word.size()+30 ; k < i-word.size() + 34 ; k++)
+                            tmp_arr[k-(i-word.size()+30)] = array[k];
+                        Thp      = atof(tmp_arr);
+                        
+                    }
+                }
+            }
+        }
+    }
+    else{
+        cout << "could not open kinematics file" << endl;
+    }
+    Printf("starting SIMC with E0=%f, P(e)=%f, Theta(e)=%f, P(p)=%f, Theta(p)=%f ",E0,Pe,The,Pp,Thp);
+    InFile.close();
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
