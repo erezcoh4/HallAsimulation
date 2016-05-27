@@ -131,7 +131,7 @@ void TAnalysisSIMC::SetGlobals(TString Spectrometers){
                             tmp_arr[k-(i-word.size()+25)] = array[k];
                         Pp      = atof(tmp_arr);
                         
-                        for (int k = i-word.size()+30 ; k < i-word.size() + 34 ; k++)
+                        for (int k = i-word.size()+30 ; k < i-word.size() + 36 ; k++)
                             tmp_arr[k-(i-word.size()+30)] = array[k];
                         Thp      = atof(tmp_arr);
                         
@@ -143,7 +143,7 @@ void TAnalysisSIMC::SetGlobals(TString Spectrometers){
     else{
         cout << "could not open kinematics file" << endl;
     }
-    Printf("starting SIMC with E0=%f, P(e)=%f, Theta(e)=%f, P(p)=%f, Theta(p)=%f ",E0,Pe,The,Pp,Thp);
+    Printf("starting SIMC with Q=%.2f, E0=%.2f, P(e)=%.2f, Theta(e)=%.2f, P(p)=%.2f, Theta(p)=%.2f ",SIMCQ,E0,Pe,The,Pp,Thp);
     InFile.close();
     
 }
@@ -161,7 +161,7 @@ void TAnalysisSIMC::SetNormFact(){
     char * dig_arr  = new char[8];
     float digits    = 0;
     if (InFile.is_open()) {
-        cout << "opened " << Path << "/hist/" << InFileName << ".hist" << endl;
+        cout << "opened " << Path << "hist/" << InFileName << ".hist" << endl;
         while(!InFile.eof() && position < array_size) {
             InFile.get(array[position]); //reading one character from file to array
             position++;
@@ -265,6 +265,7 @@ void TAnalysisSIMC::ScaleToYield(TH1F * h,bool DoPrint){
         SHOW(Q);
         SHOW(NormFac);
         SHOW(Nentries);
+        SHOW(h->GetEntries());
         SHOW((float)h->GetEntries()/Nentries);
         SHOW(ScaleFactor);
         SHOW(totweights);

@@ -65,6 +65,12 @@ public:
     // GETs
     TString           GetPath (){return Path;};
     Float_t          GetYield (){return yield;};
+    Float_t              GetQ (){return SIMCQ;};
+    Float_t             GetE0 (){return E0;};
+    Float_t             GetPe (){return Pe;};
+    Float_t             GetPp (){return Pp;};
+    Float_t            GetThe (){return The;};
+    Float_t            GetThp (){return Thp;};
     
     
     // SETs
