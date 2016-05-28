@@ -21,34 +21,34 @@ TPlots(Form("$SIMCFiles/data/run%d.root",run_number),"h666",Form("run%d",run_num
     SetNormFact     ();
     
 }
-
-
-
-// two arms
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, TString target, int beamdays , float simcQ, float i, Float_t fE0, Float_t fPe, Float_t fThe, Float_t fPp, Float_t fThp):
-TPlots(Form("$SIMCFiles/data/run%d.root",fFileNumber),"h666",Form("run%d",fFileNumber),false){
-
-    E0  = fE0;
-    Pe  = fPe;
-    The = fThe;
-    Pp  = fPp;
-    Thp = fThp;
-    Printf("starting SIMC with E0=%f, P(e)=%f, Theta(e)=%f, P(p)=%f, Theta(p)=%f ",E0,Pe,The,Pp,Thp);
-    
-    SetPath         ("/Users/erezcohen/Desktop/A3/Simulation/simc_files/");
-    SetInFileName   ( Form("run%d",fFileNumber) );
-    SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
-    SetTree         ((TTree*) InFile->Get( "h666" ));
-    SetBeamDays     ( beamdays );
-    SetSIMCQ        ( simcQ );
-    SetI            ( i );
-    SetTarget       ( target );
-    SetExpType      ( "TwoArmsCoincidence" );
-    SetGlobals      ();
-    SetAliases      ();
-    SetNormFact     ();
-}
+//
+//
+// delete June 01
+//// two arms
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//TAnalysisSIMC::TAnalysisSIMC(int fFileNumber, TString target, int beamdays , float simcQ, float i, Float_t fE0, Float_t fPe, Float_t fThe, Float_t fPp, Float_t fThp):
+//TPlots(Form("$SIMCFiles/data/run%d.root",fFileNumber),"h666",Form("run%d",fFileNumber),false){
+//
+//    E0  = fE0;
+//    Pe  = fPe;
+//    The = fThe;
+//    Pp  = fPp;
+//    Thp = fThp;
+//    Printf("starting SIMC with E0=%f, P(e)=%f, Theta(e)=%f, P(p)=%f, Theta(p)=%f ",E0,Pe,The,Pp,Thp);
+//    
+//    SetPath         ("/Users/erezcohen/Desktop/A3/Simulation/simc_files/");
+//    SetInFileName   ( Form("run%d",fFileNumber) );
+//    SetInFile       ( new TFile( Path + "/data/" + InFileName + ".root"));
+//    SetTree         ((TTree*) InFile->Get( "h666" ));
+//    SetBeamDays     ( beamdays );
+//    SetSIMCQ        ( simcQ );
+//    SetI            ( i );
+//    SetTarget       ( target );
+//    SetExpType      ( "TwoArmsCoincidence" );
+//    SetGlobals      ();
+//    SetAliases      ();
+//    SetNormFact     ();
+//}
 
 // single arm
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,7 +88,7 @@ void TAnalysisSIMC::SetGlobals(TString Spectrometers){
         L = 0;
     Nentries    = Tree -> GetEntries();
     totweights  = GetBranchSum((ExpType=="SingleArm")?"ok_spec":"Weight","");
-    
+    SHOW(totweights);
     
     ifstream InFile;
     InFile.open(Path+"/Kinematics");
@@ -230,7 +230,10 @@ void TAnalysisSIMC::SetAliases(){
 TH1F *  TAnalysisSIMC::H1 (TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
                            , TString Title, TString XTtitle, TString YTitle, int color){
     TH1F* h = TPlots::H1(var,cut,option,Nbins,Xlow,Xup,Title,XTtitle,YTitle,color,color);
-    if(ExpType!="SingleArm") ScaleToYield(h,true);
+    yield   = (totweights * NormFac / Nentries) * ((float)h->GetEntries()/Nentries);           // total yield
+    SHOW(h->Integral());
+    SHOW(yield);
+//    if(ExpType!="SingleArm") ScaleToYield(h,true);
     return h;
 }
 
@@ -239,7 +242,8 @@ TH2F *  TAnalysisSIMC::H2 (TString varX,TString varY, TCut cut, TString option
                            , int NbinsX, double Xlow, double Xup, int NbinsY, double Ylow, double Yup
                            , TString Title, TString XTtitle, TString YTitle, int color){
     TH2F* h = TPlots::H2(varX,varY,cut,option,NbinsX,Xlow,Xup,NbinsY,Ylow,Yup,Title,XTtitle,YTitle,color);
-    if(ExpType!="SingleArm") ScaleToYield((TH1F*)h,true);
+    yield   = (totweights * NormFac / Nentries) * ((float)h->GetEntries()/Nentries);           // total yield
+//    if(ExpType!="SingleArm") ScaleToYield((TH1F*)h,true);
     return h;
 }
 
@@ -253,16 +257,14 @@ TH2F *  TAnalysisSIMC::H2 (TString varX,TString varY, TCut cut, TString option
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void TAnalysisSIMC::ScaleToYield(TH1F * h,bool DoPrint){
     // normfac is retrieved from .hist file, and given per SIMCQ[mC] = 1 hour run at current I[uA]
-    float Q     = SIMCQ;//24 * BeamDays * (SIMCQ*1000/(I * 60 * 60));       //time * (I/(1.e6))*1000;       // [mC]
     yield       = (totweights * NormFac / Nentries) * ((float)h->GetEntries()/Nentries);           // total yield
-    //    h -> Scale( (Target == "D") ? (NormFac / Nentries) * (Q/1.5) :  (NormFac / Nentries) * Q)  ; // Hall-A (A=3) scaling of 3/2
-    float ScaleFactor = ( NormFac / Nentries ) * ((float)h->GetEntries()/Nentries) ;
     h -> Scale( yield/(h->GetEntries()) )  ;
+
+    float ScaleFactor = ( NormFac / Nentries ) * ((float)h->GetEntries()/Nentries) ;
+    //    h -> Scale( ScaleFactor / h->GetEntries())  ;
     if (typeid(h)==typeid(TH1F)) h -> GetYaxis() -> SetRangeUser(0,1.1*h->GetMaximum());
     
     if(DoPrint){
-        Printf("for beam charge of %.1f mC:",Q);
-        SHOW(Q);
         SHOW(NormFac);
         SHOW(Nentries);
         SHOW(h->GetEntries());
@@ -273,7 +275,7 @@ void TAnalysisSIMC::ScaleToYield(TH1F * h,bool DoPrint){
         SHOW(yield);
         SHOW(h -> Integral());
     }
-    Printf("expected %.1f events/%.1f Coulomb",yield,Q/1000.);
+    Printf("expected %.1f events/%.1f Coulomb",yield,SIMCQ/1000.);
 }
 
 

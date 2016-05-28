@@ -52,7 +52,7 @@ public:
     
     TAnalysisSIMC (){};
 //    TAnalysisSIMC (int filenumber, TString target, int beamdays = 100,float simcQ = 1, float i = 25); // two arms
-    TAnalysisSIMC (int filenumber, TString target, int beamdays ,float simcQ , float i = 25, float fE0 = 1 , Float_t fPe = 1 , Float_t fThe = 10, Float_t fPp = 1 , Float_t fThp = 10); // two arms
+//    TAnalysisSIMC (int filenumber, TString target, int beamdays ,float simcQ , float i = 25, float fE0 = 1 , Float_t fPe = 1 , Float_t fThe = 10, Float_t fPp = 1 , Float_t fThp = 10); // two arms
     
     TAnalysisSIMC (int run_number, TString target);
     
@@ -71,6 +71,7 @@ public:
     Float_t             GetPp (){return Pp;};
     Float_t            GetThe (){return The;};
     Float_t            GetThp (){return Thp;};
+    Float_t       GetNormfact (){return NormFac;};
     
     
     // SETs

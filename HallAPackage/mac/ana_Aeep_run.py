@@ -30,68 +30,76 @@ Pe_cent = ana.GetPe()
 Pp_cent = ana.GetPp()
 The_cent = ana.GetThe()
 Thp_cent = ana.GetThp()
-if run==28:
-    Pp_Select = 2.31
-    Theta_p_Select = 53.5
-elif run==37:
-    Pp_Select = 2.993
-    Theta_p_Select = 35.1
-else:
-    Pp_Select = 2.
-    Theta_p_Select = 44
+
+Pp_Select = Pp_cent
+Theta_p_Select = Thp_cent
 
 
-WeightCut   = ROOT.TCut("Weight")
-SuccessCut  = ROOT.TCut("success")
-Q2Cut       = ROOT.TCut("2.5 < Q2")
-XbCut       = ROOT.TCut("1.3 < Q2/(2*0.938*nu)")
-theta_rqCut = ROOT.TCut("theta_rq<40")
-Select_pCut = ROOT.TCut("(fabs(Pp-%f)<%f)"%(Pp_Select,0.1*Pp_Select))
-Select_thCut= ROOT.TCut("(fabs(Theta_p-%f)<1.6)"%Theta_p_Select)
-PmissCut    = ROOT.TCut("0.35 < Pm && Pm < 0.55")
-SHMSFidCut  = ROOT.TCut("(-0.04 < hsyptar && hsyptar < 0.04) && (-0.024 < hsxptar && hsxptar < 0.024)")
-HMSthFidCut = ROOT.TCut("(-0.06 < ssyptar && ssyptar < 0.06)")
-HMSphFidCut = ROOT.TCut("(-0.035 < ssxptar && ssxptar < 0.035)")
-delta_eCut  = ROOT.TCut("(-10 < hsdelta && hsdelta < 22)")
-delta_pCut  = ROOT.TCut("(-10 < ssdelta && ssdelta < 10)")
+Weight      = "Weight*%f"%(ana.GetNormfact()/ana.Nentries)
+print "Weight = ",Weight
+
+Q2          = "2.5 < Q2"
+Xb          = "1.3 < Q2/(2*0.938*nu)"
+theta_rq    = "theta_rq<40"
+Select_p    = "(fabs(Pp-%f)<%f)"%(Pp_Select,0.1*Pp_Select)
+Select_theta= "(fabs(Theta_p-%f)<1.6)"%Theta_p_Select
+Pmiss       = "0.35 < Pm && Pm < 0.55"
+SHMSFid     = "(-0.04 < hsyptar && hsyptar < 0.04) && (-0.024 < hsxptar && hsxptar < 0.024)"
+HMSthFid    = "(-0.06 < ssyptar && ssyptar < 0.06)"
+HMSphFid    = "(-0.035 < ssxptar && ssxptar < 0.035)"
+delta_e     = "(-10 < hsdelta && hsdelta < 22)"
+delta_p     = "(-10 < ssdelta && ssdelta < 10)"
+WernerCuts  = "(-0.05 < hsyptar && hsyptar < 0.05) && (-0.025 < hsxptar && hsxptar < 0.025) && (-8 < hsdelta && hsdelta < 4) && (-0.06 < ssyptar && ssyptar < 0.06) && (-0.035 < ssxptar && ssxptar < 0.035) && (-10 < ssdelta && ssdelta < 10) && (1.3 < Q2/(2*0.938*nu) && Q2/(2*0.938*nu) < 1.4) && (4. < Q2 && Q2 < 4.5)"
+
 
 if cutname == "NoCut":
-    cut = WeightCut + SHMSFidCut + delta_eCut + HMSphFidCut
+    cut = ROOT.TCut("%s*( %s )"%(Weight,SHMSFid))
+
+elif cutname == "Werner-Cuts":
+    cut = ROOT.TCut("%s*( %s )"%(Weight,WernerCuts))
+
 
 elif cutname == "Select_{p}-Select_{#theta}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + HMSphFidCut + Select_pCut + Select_thCut
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Select_p , Select_theta ))
+
 
 elif cutname == "x_{B}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + HMSphFidCut
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Xb ))
 
 
-elif cutname == "Q^{2}-x_{B}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + Q2Cut + HMSphFidCut
+elif cutname == "x_{B}-Q^{2}":
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s)"%(Weight , SHMSFid , delta_e , HMSphFid , Xb , Q2 ))
+
+
+elif cutname == "Q^{2}":
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Q2 ))
+
+
+
+elif cutname == "Q^{2}-Select_{p}-Select_{#theta}-Fid_{HMS}":
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Q2 , Select_p , Select_theta , HMSthFid))
+
 
 
 elif cutname == "Q^{2}-x_{B}-Select_{p}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + Q2Cut + HMSphFidCut + Select_pCut
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Q2 , Xb , Select_p ))
 
 
 elif cutname == "Q^{2}-x_{B}-Select_{p}-Select_{#theta}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + Q2Cut + HMSphFidCut + Select_pCut + Select_thCut
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Q2 , Xb , Select_p , Select_theta))
 
 
 elif cutname == "Q^{2}-x_{B}-Select_{p}-Select_{#theta}-Fid_{HMS}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + Q2Cut + HMSphFidCut + Select_pCut + Select_thCut + PmissCut
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s && %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Q2 , Xb , Select_p , Select_theta , HMSthFid , delta_p ))
 
 
 elif cutname == "Q^{2}-x_{B}-Select_{p}-Select_{#theta}-Fid_{HMS}-p_{miss}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + Q2Cut + HMSphFidCut + Select_pCut + Select_thCut + HMSthFidCut + PmissCut
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s && %s && %s && %s && %s && %s  )"%(Weight , SHMSFid , delta_e , HMSphFid , Q2 , Xb , Select_p , Select_theta , HMSthFid , delta_p , Pmiss ))
 
 
 elif cutname == "Q^{2}-x_{B}-Select_{p}-Select_{#theta}-Fid_{HMS}-p_{miss}-theta_{rq}":
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + Q2Cut + HMSphFidCut + Select_pCut + Select_thCut + HMSthFidCut + PmissCut + theta_rqCut
+    cut = ROOT.TCut("%s*( %s && %s && %s && %s && %s && %s && %s && %s && %s && %s && %s )"%(Weight , SHMSFid , delta_e , HMSphFid , Q2 , Xb , Select_p , Select_theta , HMSthFid , delta_p , Pmiss , theta_rq ))
 
-
-
-elif cutname == "Werner-Cuts":
-    cut = ROOT.TCut("Weight && success && (-0.05 < hsyptar && hsyptar < 0.05) && (-0.025 < hsxptar && hsxptar < 0.025) && (-8 < hsdelta && hsdelta < 4) && (-0.06 < ssyptar && ssyptar < 0.06) && (-0.035 < ssxptar && ssxptar < 0.035) && (-10 < ssdelta && ssdelta < 10) && (1.3 < Q2/(2*0.938*nu) && Q2/(2*0.938*nu) < 1.4) && (4. < Q2 && Q2 < 4.5)")
 
 else:
     cut = ROOT.TCut()
@@ -123,13 +131,14 @@ if Operation=="Kinematics":
     c.cd(9)
     ana.H1("zreacti" , cut , "hist" , Nbins , -1 , 1, "run %d"%run , "z(reaction) vertex [cm]" , "" , 38) # for z-reaction see eq. 30 in Hall-A NIM paper
     c.cd(10)
-    ana.H1("Pm" , cut , "hist" , 40 , 0 , 1.6, "run %d"%run , "|p_{miss}| [GeV/c]" , "" , 38)
+    h=ana.H1("Pm" , cut , "hist" , 40 , 0 , 1.6, "run %d"%run , "|p_{miss}| [GeV/c]" , "" , 38)
     ROOT.gPad.SetLogy()
     c.cd(11)
     ana.Text(0.1,0.5,cutname,46,0.07)
     ana.Text(0.1,0.4,"%.0f events"%ana.GetYield(),46,0.07)
     ana.Text(0.1,0.3,"per %.0f mC"%ana.GetQ(),46,0.07)
-
+    print "h  integral= ",h.Integral()
+    print "yield = ",ana.GetYield()
     c.Update()
     wait()
     c.SaveAs(init.dirname()+"/run%d"%run+"_"+cutname+".pdf")
