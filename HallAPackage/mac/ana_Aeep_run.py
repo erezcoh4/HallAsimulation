@@ -47,7 +47,7 @@ HMSphFid    = "(-0.035 < ssxptar && ssxptar < 0.035)"
 delta_e     = "(-10 < hsdelta && hsdelta < 22)"
 delta_p     = "(-10 < ssdelta && ssdelta < 10)"
 WernerCuts  = "(-0.05 < hsyptar && hsyptar < 0.05) && (-0.025 < hsxptar && hsxptar < 0.025) && (-8 < hsdelta && hsdelta < 4) && (-0.06 < ssyptar && ssyptar < 0.06) && (-0.035 < ssxptar && ssxptar < 0.035) && (-10 < ssdelta && ssdelta < 10) && (1.3 < Q2/(2*0.938*nu) && Q2/(2*0.938*nu) < 1.4) && (4. < Q2 && Q2 < 4.5) && (-0.01 < Em && Em < 0.025)"
-RanCuts     = "(-0.028 < hsyptar && hsyptar < 0.028) && (-0.060 < hsxptar && hsxptar < 0.060) && (-4.5 < hsdelta && hsdelta < 4.5) && (-0.028 < ssyptar && ssyptar < 0.028) && (-0.060 < ssxptar && ssxptar < 0.060) && (-4.5 < ssdelta && ssdelta < 4.5) " # && ( 1. < Q2/(2*0.938*nu) )
+RanCuts     = "(-0.028 < hsyptar && hsyptar < 0.028) && (-0.060 < hsxptar && hsxptar < 0.060) && (-4.5 < hsdelta && hsdelta < 4.5) && (-0.028 < ssyptar && ssyptar < 0.028) && (-0.060 < ssxptar && ssxptar < 0.060) && (-4.5 < ssdelta && ssdelta < 4.5)&& ( 1. < Q2/(2*0.938*nu) ) " # && ( 1. < Q2/(2*0.938*nu) )
 RanCutsthph = "(-0.028 < hsxptar && hsxptar < 0.028) && (-0.060 < hsyptar && hsyptar < 0.060) && (-4.5 < hsdelta && hsdelta < 4.5) && (-0.028 < ssxptar && ssxptar < 0.028) && (-0.060 < ssyptar && ssyptar < 0.060) && (-4.5 < ssdelta && ssdelta < 4.5) && ( 1. < Q2/(2*0.938*nu) )"
 
 
