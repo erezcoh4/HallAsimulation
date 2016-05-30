@@ -99,15 +99,15 @@ public:
     
     
     // TH1F
-    TH1F *           H1 (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",TString YT="",int c=1);
+    TH1F *           H1 (TString, TString, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",TString YT="",int c=1);
 
-    TH2F *           H2 (TString,TString, TCut, TString
+    TH2F *           H2 (TString,TString, TString, TString
                          , int NbinsX, double Xlow, double Xup, int NbinsY, double Ylow, double Yup
                          , TString T="", TString XT="", TString YT="", int c=1);
 
     
-    TH1F * Resolution1D (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
-    TH1F *          Res (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
+//    TH1F * Resolution1D (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
+//    TH1F *          Res (TString, TCut, TString, int Nbins, double Xlow, double Xup,TString T="",TString XT="",int c=1);
     
     
     

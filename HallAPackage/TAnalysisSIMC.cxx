@@ -196,6 +196,8 @@ void TAnalysisSIMC::SetNormFact(){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void TAnalysisSIMC::SetAliases(){
+    // electron arm = hs... , hadron arm = ss....
+    char eArm = 'h' , pArm = 's';
     SetAlias("Ysieve",Form("hsytar+%f*hsyptar",L));
     Tree -> SetAlias("Ysieve",Form("hsytar+%f*hsyptar",L));
     SetAlias("Xsieve",Form("0+%f*hsxptar",L));
@@ -203,47 +205,54 @@ void TAnalysisSIMC::SetAliases(){
     if (ExpType!="SingleArm" && strcmp(Target,"D")==0){
         SetAlias("theta_rq","180-TMath::RadToDeg()*TMath::ACos(Pmpar/Pm)");
         Tree -> SetAlias("theta_rq","180-TMath::RadToDeg()*TMath::ACos(Pmpar/Pm)");
+        
         SetAlias("Pp_cent",Form("(Q2/Q2)*%f",Pp));
         Tree -> SetAlias("Pp_cent",Form("(Q2/Q2)*%f",Pp));
-        SetAlias("Pp","Pp_cent*(hsdelta/100+1)");
-        Tree -> SetAlias("Pp","Pp_cent*(hsdelta/100+1)");
-        SetAlias("Theta_p","Thp_cent + (TMath::RadToDeg()*hsyptar)");
-        Tree -> SetAlias("Theta_p","Thp_cent + (TMath::RadToDeg()*hsyptar)");
-        
+        SetAlias("Pp",Form("Pp_cent*(%csdelta/100+1)",eArm));
+        Tree -> SetAlias("Pp",Form("Pp_cent*(%csdelta/100+1)",eArm));
         SetAlias("Thp_cent",Form("(Q2/Q2)*%f",Thp));
         Tree -> SetAlias("Thp_cent",Form("(Q2/Q2)*%f",Thp));
+        SetAlias("Theta_p",Form("Thp_cent + (TMath::RadToDeg()*%csyptar)",eArm));
+        Tree -> SetAlias("Theta_p",Form("Thp_cent + (TMath::RadToDeg()*%csyptar)",eArm));
+        
         SetAlias("Pe_cent",Form("(Q2/Q2)*%f",Pe));
         Tree -> SetAlias("Pp_cent",Form("(Q2/Q2)*%f",Pe));
         SetAlias("The_cent",Form("(Q2/Q2)*%f",The));
         Tree -> SetAlias("The_cent",Form("(Q2/Q2)*%f",The));
-        SetAlias("Pe","Pe_cent*(ssdelta/100+1)");
-        Tree -> SetAlias("Pe","Pe_cent*(ssdelta/100+1)");
+        SetAlias("Pe",Form("Pe_cent*(%csdelta/100+1)",pArm));
+        Tree -> SetAlias("Pe",Form("Pe_cent*(%csdelta/100+1)",pArm));
 
-        SetAlias("Theta_e","The_cent + (TMath::RadToDeg()*ssyptar)"); 
-        Tree -> SetAlias("Theta_e","The_cent + (TMath::RadToDeg()*ssyptar)");
+        SetAlias("Theta_e",Form("The_cent + (TMath::RadToDeg()*%csyptar)",pArm));
+        Tree -> SetAlias("Theta_e",Form("The_cent + (TMath::RadToDeg()*%csyptar)",pArm));
     }
 }
 
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TH1F *  TAnalysisSIMC::H1 (TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
+TH1F *  TAnalysisSIMC::H1 (TString var, TString cuts, TString option, int Nbins, double Xlow, double Xup
                            , TString Title, TString XTtitle, TString YTitle, int color){
-    TH1F* h = TPlots::H1(var,cut,option,Nbins,Xlow,Xup,Title,XTtitle,YTitle,color,color);
-    yield   = (totweights * NormFac / Nentries) * ((float)h->GetEntries()/Nentries);           // total yield
-    SHOW(h->Integral());
-    SHOW(yield);
-//    if(ExpType!="SingleArm") ScaleToYield(h,true);
+    TCut cut(Form("%s",cuts.Data()));
+    TCut cutWeight(Form("(Weight*%lf)*(%s)",(float)NormFac/Nentries,cuts.Data()));
+    TH1F* h = TPlots::H1(var,cutWeight,option,Nbins,Xlow,Xup,Title,XTtitle,YTitle,color,color);
+    totweights = GetBranchSum("Weight",cut);
+    yield   = ( totweights * NormFac / Nentries ) ;
+//    SHOW(h->Integral());
+//    SHOW(yield);
     return h;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TH2F *  TAnalysisSIMC::H2 (TString varX,TString varY, TCut cut, TString option
+TH2F *  TAnalysisSIMC::H2 (TString varX,TString varY, TString cuts, TString option
                            , int NbinsX, double Xlow, double Xup, int NbinsY, double Ylow, double Yup
                            , TString Title, TString XTtitle, TString YTitle, int color){
-    TH2F* h = TPlots::H2(varX,varY,cut,option,NbinsX,Xlow,Xup,NbinsY,Ylow,Yup,Title,XTtitle,YTitle,color);
-    yield   = (totweights * NormFac / Nentries) * ((float)h->GetEntries()/Nentries);           // total yield
-//    if(ExpType!="SingleArm") ScaleToYield((TH1F*)h,true);
+    TCut cut(Form("%s",cuts.Data()));
+    TCut cutWeight(Form("(Weight*%lf)*(%s)",(float)NormFac/Nentries,cuts.Data()));
+    TH2F* h = TPlots::H2(varX,varY,cutWeight,option,NbinsX,Xlow,Xup,NbinsY,Ylow,Yup,Title,XTtitle,YTitle,color);
+    totweights = GetBranchSum("Weight",cut);
+    yield   = ( totweights * NormFac / Nentries ) ;
+//    SHOW(h->Integral());
+//    SHOW(yield);
     return h;
 }
 
@@ -279,22 +288,22 @@ void TAnalysisSIMC::ScaleToYield(TH1F * h,bool DoPrint){
 }
 
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TH1F *  TAnalysisSIMC::Resolution1D(TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
-                                    , TString Title, TString XTitle, int color){
-    return H1(Form("(%s-%si)",var.Data(),var.Data()),cut,option,Nbins,Xlow,Xup
-              ,"Res. in "+Title, XTitle, "", color);
-}
-
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TH1F *  TAnalysisSIMC::Res(TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
-                                , TString Title, TString XTitle, int color){
-    return H1(Form("100*(%s-%si)/%si",var.Data(),var.Data(),var.Data()),cut,option,Nbins,Xlow,Xup
-              ,Form("(%s(rec.)-%s(gen.))/%s(gen.)",Title.Data(),Title.Data(),Title.Data()), Form("#Delta %s/%s(gen.) [%%]",Title.Data(),Title.Data()), "", color);
-}
+//
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//TH1F *  TAnalysisSIMC::Resolution1D(TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
+//                                    , TString Title, TString XTitle, int color){
+//    return H1(Form("(%s-%si)",var.Data(),var.Data()),cut,option,Nbins,Xlow,Xup
+//              ,"Res. in "+Title, XTitle, "", color);
+//}
+//
+//
+//
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//TH1F *  TAnalysisSIMC::Res(TString var, TCut cut, TString option, int Nbins, double Xlow, double Xup
+//                                , TString Title, TString XTitle, int color){
+//    return H1(Form("100*(%s-%si)/%si",var.Data(),var.Data(),var.Data()),cut,option,Nbins,Xlow,Xup
+//              ,Form("(%s(rec.)-%s(gen.))/%s(gen.)",Title.Data(),Title.Data(),Title.Data()), Form("#Delta %s/%s(gen.) [%%]",Title.Data(),Title.Data()), "", color);
+//}
 
 
 

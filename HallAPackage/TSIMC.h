@@ -43,18 +43,18 @@ public:
     ~TSIMC() { }
     
  
-    void      DrawQuantity (TString, int,double, double, TString, TString, bool DoAddLegend = false, bool DoAddCuts = false , double cXl=0, double cXu=0);
-    void    DrawQuantity2D (TString, TString, int,double, double,int,double, double, TString, TString, TString, TString,
-                            bool DoAddLegend = false, bool DoAddCuts = false,double cXl=0, double cXu=0,double cYl=0, double cYu=0);
-    void    DrawResolution (TString, int,double, double, float MulFac, TString, TString, bool DoAddLegend = false);
-    void           DrawRes (TString, int,double, double, TString, TString, bool DoAddLegend = false);
+//    void      DrawQuantity (TString, int,double, double, TString, TString, bool DoAddLegend = false, bool DoAddCuts = false , double cXl=0, double cXu=0);
+//    void    DrawQuantity2D (TString, TString, int,double, double,int,double, double, TString, TString, TString, TString,
+//                            bool DoAddLegend = false, bool DoAddCuts = false,double cXl=0, double cXu=0,double cYl=0, double cYu=0);
+//    void    DrawResolution (TString, int,double, double, float MulFac, TString, TString, bool DoAddLegend = false);
+//    void           DrawRes (TString, int,double, double, TString, TString, bool DoAddLegend = false);
 
     void           SetCuts ();
 
 
     void         MergeFiles (int, int);
-    TH1F*   CompareVariable (TString, TString, int, int, int, double, double, TString, TString);
-    TH2F* CompareVariable2D (TString, TString, int, int, int, double, double, TString, TString);
+//    TH1F*   CompareVariable (TString, TString, int, int, int, double, double, TString, TString);
+//    TH2F* CompareVariable2D (TString, TString, int, int, int, double, double, TString, TString);
 
 
 

@@ -31,168 +31,168 @@ void TSIMC::SetCuts(){
 
 
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void TSIMC::DrawQuantity(TString Var, int Nbins,
-                         double Xlow, double Xup,
-                         TString Title, TString Units,
-                         bool DoAddLegend, bool DoAddCuts, double cutXlow, double cutXup){
-    TCut cut = YtagCut && okCut;
-    vector      <float> frac;
-    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
-    double      Maximum = 0 ,  FWHM[sizeof(FileNumbers)/sizeof(int)];
-    TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
-    TString     XTitle = (Units!=""&&Units!="e-4") ? Title + " [" + Units + "]" : Title;
-    
-    for ( int i = 0 ; i < N ; i++ ) {
-        
-        h[i]    = ana[i]->H1(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,"",colors[i]);
-        Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
-        
-        // FWHM
-        if (DoAddLegend) {
-            FWHM[i] = analysis.GetFWHM(h[i]);
-            ana[0] -> Text(h[i]->GetMean(),h[i]->GetMaximum(),Form("FWHM=%.5f %s",FWHM[i],Units.Data()),colors[i]);
-        }
-       
-    }
-    
-    int BaseLineEntries = h[0] -> GetEntries();
-    for ( int i = 0 ; i < N ; i++ ) {
-        frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
-        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
-        h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
-        
-    }
-    
-    if (DoAddCuts) {
-        ana[0]->Line(cutXlow,0,cutXlow,1.1*Maximum,2,2);
-        ana[0]->Line(cutXup,0,cutXup,1.1*Maximum,2,2);
-    }
-    
-    if (DoAddLegend){
-        ana[0]->AddLegend(N,h,Labels,"f");
-    }
-}
-
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void TSIMC::DrawQuantity2D(TString VarX, TString VarY,
-                           int NbinsX,double Xlow, double Xup,
-                           int NbinsY,double Ylow, double Yup,
-                           TString XTitle, TString XUnits, TString YTitle, TString YUnits,
-                           bool DoAddLegend, bool DoAddCuts,
-                           double cutXlow, double cutXup,
-                           double cutYlow, double cutYup){
-    TCut cut = YtagCut && okCut;
-    vector      <float> frac;
-    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
-    float       Maximum = 0;
-    TH2F        * h2[sizeof(FileNumbers)/sizeof(int)];
-    TString Title   = XTitle + " vs. " + YTitle;
-    XTitle = (XUnits=="") ? XTitle : (XTitle + " [" + XUnits + "] ") ;
-    YTitle = (YUnits=="") ? YTitle : (YTitle + " [" + YUnits + "] ") ;
-    
-    for ( int i = 0 ; i < N ; i++ ) {
-        
-        h2[i]   = ana[i]->TPlots::H2(VarX, VarY,cut,(i==0)?"":"same",NbinsX ,Xlow ,Xup,NbinsY ,Ylow ,Yup ,Title ,XTitle ,YTitle ,colors[i], 20, 0.9 , 1);
-    }
-    
-    int BaseLineEntries = h2[0] -> GetEntries();
-    for ( int i = 0 ; i < N ; i++ ) {
-        frac.push_back((float)h2[i]->GetEntries()/BaseLineEntries);
-        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
-    }
-    
-    if (DoAddCuts) {
-        ana[0]->Box(cutXlow,cutYlow,cutXup,cutYup,2,2);
-    }
-    
-    if (DoAddLegend){
-        ana[0]->AddLegend(N,h2,Labels,"p");
-    }
-}
-
-
-
-
-
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void TSIMC::DrawRes(TString Var, int Nbins,double Xlow, double Xup , TString Title, TString Units , bool DoAddLegend){
-    TCut cut = YtagCut && okCut;
-    vector      <float> frac;
-    float       Maximum = 0;
-    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
-    TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
-    TString     XTitle = (Units!="") ? Title + " [" + Units + "]" : Title;
-    
-    
-    for ( int i = 0 ; i < N ; i++ ) {
-        
-        h[i]    = ana[i] -> Res(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,colors[i]);
-        Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
- 
-    }
-    
-    int BaseLineEntries = h[0] -> GetEntries();
-    for ( int i = 0 ; i < N ; i++ ) {
-        
-        frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
-        h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
-        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
-        
-    }
-    
-    if (DoAddLegend){
-        ana[0]->AddLegend(N,h,Labels,"f");
-    }
-}
+//
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//void TSIMC::DrawQuantity(TString Var, int Nbins,
+//                         double Xlow, double Xup,
+//                         TString Title, TString Units,
+//                         bool DoAddLegend, bool DoAddCuts, double cutXlow, double cutXup){
+//    TCut cut = YtagCut && okCut;
+//    vector      <float> frac;
+//    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
+//    double      Maximum = 0 ,  FWHM[sizeof(FileNumbers)/sizeof(int)];
+//    TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
+//    TString     XTitle = (Units!=""&&Units!="e-4") ? Title + " [" + Units + "]" : Title;
+//    
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        
+//        h[i]    = ana[i]->H1(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,"",colors[i]);
+//        Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
+//        
+//        // FWHM
+//        if (DoAddLegend) {
+//            FWHM[i] = analysis.GetFWHM(h[i]);
+//            ana[0] -> Text(h[i]->GetMean(),h[i]->GetMaximum(),Form("FWHM=%.5f %s",FWHM[i],Units.Data()),colors[i]);
+//        }
+//       
+//    }
+//    
+//    int BaseLineEntries = h[0] -> GetEntries();
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
+//        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+//        h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
+//        
+//    }
+//    
+//    if (DoAddCuts) {
+//        ana[0]->Line(cutXlow,0,cutXlow,1.1*Maximum,2,2);
+//        ana[0]->Line(cutXup,0,cutXup,1.1*Maximum,2,2);
+//    }
+//    
+//    if (DoAddLegend){
+//        ana[0]->AddLegend(N,h,Labels,"f");
+//    }
+//}
+//
+//
+//
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//void TSIMC::DrawQuantity2D(TString VarX, TString VarY,
+//                           int NbinsX,double Xlow, double Xup,
+//                           int NbinsY,double Ylow, double Yup,
+//                           TString XTitle, TString XUnits, TString YTitle, TString YUnits,
+//                           bool DoAddLegend, bool DoAddCuts,
+//                           double cutXlow, double cutXup,
+//                           double cutYlow, double cutYup){
+//    TCut cut = YtagCut && okCut;
+//    vector      <float> frac;
+//    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
+//    float       Maximum = 0;
+//    TH2F        * h2[sizeof(FileNumbers)/sizeof(int)];
+//    TString Title   = XTitle + " vs. " + YTitle;
+//    XTitle = (XUnits=="") ? XTitle : (XTitle + " [" + XUnits + "] ") ;
+//    YTitle = (YUnits=="") ? YTitle : (YTitle + " [" + YUnits + "] ") ;
+//    
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        
+//        h2[i]   = ana[i]->TPlots::H2(VarX, VarY,cut,(i==0)?"":"same",NbinsX ,Xlow ,Xup,NbinsY ,Ylow ,Yup ,Title ,XTitle ,YTitle ,colors[i], 20, 0.9 , 1);
+//    }
+//    
+//    int BaseLineEntries = h2[0] -> GetEntries();
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        frac.push_back((float)h2[i]->GetEntries()/BaseLineEntries);
+//        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+//    }
+//    
+//    if (DoAddCuts) {
+//        ana[0]->Box(cutXlow,cutYlow,cutXup,cutYup,2,2);
+//    }
+//    
+//    if (DoAddLegend){
+//        ana[0]->AddLegend(N,h2,Labels,"p");
+//    }
+//}
+//
+//
 
 
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void TSIMC::DrawResolution(TString Var, int Nbins,double Xlow, double Xup, float MulFac
-                           , TString Title, TString Units , bool DoAddLegend){
-    TCut cut = YtagCut && okCut;
-    vector      <float> frac;
-    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
-    float       Maximum = 0;
-    TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
-    Units       = (MulFac==1e6) ? "u"+Units : ( (MulFac==1e4) ? "e-4"+Units :  ((MulFac==1e3) ? "m"+Units : Units));
-    TString     XTitle = (Units!=""&&Units!="e-4") ? Title + " [" + Units + "]" : Title;
+//
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//void TSIMC::DrawRes(TString Var, int Nbins,double Xlow, double Xup , TString Title, TString Units , bool DoAddLegend){
+//    TCut cut = YtagCut && okCut;
+//    vector      <float> frac;
+//    float       Maximum = 0;
+//    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
+//    TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
+//    TString     XTitle = (Units!="") ? Title + " [" + Units + "]" : Title;
+//    
+//    
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        
+//        h[i]    = ana[i] -> Res(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,colors[i]);
+//        Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
+// 
+//    }
+//    
+//    int BaseLineEntries = h[0] -> GetEntries();
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        
+//        frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
+//        h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
+//        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+//        
+//    }
+//    
+//    if (DoAddLegend){
+//        ana[0]->AddLegend(N,h,Labels,"f");
+//    }
+//}
+//
 
-    
-    for ( int i = 0 ; i < N ; i++ ) {
-        
-        h[i]    = ana[i]->Resolution1D(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,colors[i]);
-        Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
-        
-    }
-    
-    int BaseLineEntries = h[0] -> GetEntries();
-    
-    for ( int i = 0 ; i < N ; i++ ) {
-        
-        frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
-        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
-        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
-        TString txt = Form("RMS=%.2f(%.0f) %s" ,MulFac*h[i]->GetRMS(),100*MulFac*h[i]->GetRMSError(),Units.Data());
-        ana[i]->Text(h[i]->GetMean()+0.1*h[i]->GetRMS(), Maximum*(1-0.1*i) ,txt , colors[i]);
-        h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
-        
-    }
-    
-    if (DoAddLegend){
-        ana[0]->AddLegend(N,h,Labels,"f");
-    }
-}
+
+
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//void TSIMC::DrawResolution(TString Var, int Nbins,double Xlow, double Xup, float MulFac
+//                           , TString Title, TString Units , bool DoAddLegend){
+//    TCut cut = YtagCut && okCut;
+//    vector      <float> frac;
+//    TString     Labels[sizeof(FileNumbers)/sizeof(int)];
+//    float       Maximum = 0;
+//    TH1F        * h[sizeof(FileNumbers)/sizeof(int)];
+//    Units       = (MulFac==1e6) ? "u"+Units : ( (MulFac==1e4) ? "e-4"+Units :  ((MulFac==1e3) ? "m"+Units : Units));
+//    TString     XTitle = (Units!=""&&Units!="e-4") ? Title + " [" + Units + "]" : Title;
+//
+//    
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        
+//        h[i]    = ana[i]->Resolution1D(Var,cut,(i==0)?"HIST e":"same HIST e",Nbins ,Xlow ,Xup,Title,XTitle,colors[i]);
+//        Maximum = (h[i] -> GetMaximum() > Maximum) ? h[i] -> GetMaximum() : Maximum;
+//        
+//    }
+//    
+//    int BaseLineEntries = h[0] -> GetEntries();
+//    
+//    for ( int i = 0 ; i < N ; i++ ) {
+//        
+//        frac.push_back((float)h[i]->GetEntries()/BaseLineEntries);
+//        Labels[i] = (Names.empty()) ? Form("file %d [%.0f%%]",FileNumbers[i],100.*frac[i])
+//        : Form("%s [%.0f%%]",Names[i].Data(),100.*frac[i]);
+//        TString txt = Form("RMS=%.2f(%.0f) %s" ,MulFac*h[i]->GetRMS(),100*MulFac*h[i]->GetRMSError(),Units.Data());
+//        ana[i]->Text(h[i]->GetMean()+0.1*h[i]->GetRMS(), Maximum*(1-0.1*i) ,txt , colors[i]);
+//        h[i] -> GetYaxis() -> SetRangeUser(0,1.1*Maximum);
+//        
+//    }
+//    
+//    if (DoAddLegend){
+//        ana[0]->AddLegend(N,h,Labels,"f");
+//    }
+//}
 
 
 
@@ -281,50 +281,50 @@ void TSIMC::MergeFiles( int i1, int i2){
     
 }
 
+//
+//
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//TH1F* TSIMC::CompareVariable(TString Var, TString cutstr,
+//                             int i1, int i2,
+//                             int Nbins, double Xlow, double Xup,
+//                             TString Title, TString Units){
+//    
+//    TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
+//    TString XTitle  = Form("[ #Delta(%s)_{%d} - #Delta(%s)_{%d} ] / %s(gen.) [%%]",Title.Data(),i1,Title.Data(),i2,Title.Data()) ;
+//    Title           = "diff. in resolution in " + Title;
+//    TCut cut        = Form("%s",cutstr.Data());
+//    cut             = cut && Form("ok_spec_%d &&  ok_spec_%d ",i1,i2);
+//    TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) , Res2 = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
+//    TH1F * h        = anaMerged.H1(Form("100.*((%s) - (%s))/%si_%d",Res1.Data(),Res2.Data(),Var.Data(),i1),cut,"HIST e",Nbins ,Xlow ,Xup,Title,XTitle);
+//    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , h->GetMaximum() , Form("Mean=%.1f %%" ,h->GetMean()) );
+//    //    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , 0.8*h->GetMaximum() , Form("RMS=%.1f(%.0f) %%" ,h->GetRMS(),10*h->GetRMSError()) );
+//    return h;
+//    
+//}
+//
+//
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TH1F* TSIMC::CompareVariable(TString Var, TString cutstr,
-                             int i1, int i2,
-                             int Nbins, double Xlow, double Xup,
-                             TString Title, TString Units){
-    
-    TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
-    TString XTitle  = Form("[ #Delta(%s)_{%d} - #Delta(%s)_{%d} ] / %s(gen.) [%%]",Title.Data(),i1,Title.Data(),i2,Title.Data()) ;
-    Title           = "diff. in resolution in " + Title;
-    TCut cut        = Form("%s",cutstr.Data());
-    cut             = cut && Form("ok_spec_%d &&  ok_spec_%d ",i1,i2);
-    TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) , Res2 = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
-    TH1F * h        = anaMerged.H1(Form("100.*((%s) - (%s))/%si_%d",Res1.Data(),Res2.Data(),Var.Data(),i1),cut,"HIST e",Nbins ,Xlow ,Xup,Title,XTitle);
-    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , h->GetMaximum() , Form("Mean=%.1f %%" ,h->GetMean()) );
-    //    anaMerged.Text( h->GetMean()+0.1*h->GetRMS() , 0.8*h->GetMaximum() , Form("RMS=%.1f(%.0f) %%" ,h->GetRMS(),10*h->GetRMSError()) );
-    return h;
-    
-}
-
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-TH2F* TSIMC::CompareVariable2D(TString Var, TString cutstr,
-                             int i1, int i2,
-                             int Nbins, double Xlow, double Xup,
-                             TString Title, TString Units){
-    
-    TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
-    Units           = (Units!=""&&Units!="e-4") ? " [" + Units + "]" : "";
-    TString XT1     = Title + Form("_{%d} - ",i1) + Title + Units;
-    TString XT2     = Title + Form("_{%d} - ",i2) + Title + Units;
-    TCut cut        = Form("%s",cutstr.Data());
-    cut             = cut && Form("ok_spec_%d &&  ok_spec_%d ",i1,i2);
-    //    TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) ;
-    //    TString Res2    = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
-    TString Res1    = Form("%si_%d",Var.Data(),i1) ;
-    TString Res2    = Form("%si_%d",Var.Data(),i2) ;
-    TH2F * h        = anaMerged.H2(Res1,Res2,cut,"colz",Nbins ,Xlow ,Xup,Nbins ,Xlow ,Xup,Title,XT1,XT2);
-    return h;
-    
-}
-
+////....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//TH2F* TSIMC::CompareVariable2D(TString Var, TString cutstr,
+//                             int i1, int i2,
+//                             int Nbins, double Xlow, double Xup,
+//                             TString Title, TString Units){
+//    
+//    TAnalysisSIMC anaMerged(Form("Merged_%d_%d",i1,i2));
+//    Units           = (Units!=""&&Units!="e-4") ? " [" + Units + "]" : "";
+//    TString XT1     = Title + Form("_{%d} - ",i1) + Title + Units;
+//    TString XT2     = Title + Form("_{%d} - ",i2) + Title + Units;
+//    TCut cut        = Form("%s",cutstr.Data());
+//    cut             = cut && Form("ok_spec_%d &&  ok_spec_%d ",i1,i2);
+//    //    TString Res1    = Form("%s_%d - %si_%d",Var.Data(),i1,Var.Data(),i1) ;
+//    //    TString Res2    = Form("%s_%d - %si_%d",Var.Data(),i2,Var.Data(),i2);
+//    TString Res1    = Form("%si_%d",Var.Data(),i1) ;
+//    TString Res2    = Form("%si_%d",Var.Data(),i2) ;
+//    TH2F * h        = anaMerged.H2(Res1,Res2,cut,"colz",Nbins ,Xlow ,Xup,Nbins ,Xlow ,Xup,Title,XT1,XT2);
+//    return h;
+//    
+//}
+//
 
 
 
