@@ -10,7 +10,7 @@ init.createnewdir()
 plot    = TPlots()
 
 
-Operation   = "Kinematics" #"Pmiss" # "Kinematics" # "Plots For Proposal"
+Operation   = "Plots For Proposal" #"Pmiss" # "Kinematics" # "Plots For Proposal"
 Nbins       = 50
 cutname     = ""
 
@@ -35,6 +35,7 @@ Theta_p_Select = 42.5 # run 46 is what we use for the proposal - 43.0
 
 
 Q2          = "2.5 < Q2"
+Q2LowPmiss  = "2. < Q2"
 Xb          = "1.2 < Q2/(2*0.938*nu)"
 theta_rq    = "theta_rq<40"
 Select_p    = "(fabs(Pp-%f)<%f)"%(Pp_Select,0.1*Pp_Select)
@@ -66,8 +67,11 @@ elif cutname == "electron-fiducials-HMS_{#phi}":
 elif cutname == "electron-fiducials-HMS_{#phi}-select_{p}-select_{#theta}":
     cuts = "( %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Select_p , Select_theta )
 
-elif cutname == "electron-fiducials-HMS_{#phi}-select_{p}-select_{#theta}-LowPmiss":
+elif cutname == "electron-fiducials-HMS_{#phi}-select_{p}-select_{#theta}-LowPmiss": # for low Pmiss kinematics
     cuts = "( %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Select_p , Select_theta , LowPmiss)
+
+elif cutname == "electron-fiducials-HMS_{#phi}-select_{p}-select_{#theta}-LowPmiss-Q^{2}": # for low Pmiss kinematics
+    cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Select_p , Select_theta , LowPmiss , Q2LowPmiss)
 
 
 elif cutname == "electron-fiducials-HMS_{#phi}-p_{miss}":
@@ -75,15 +79,15 @@ elif cutname == "electron-fiducials-HMS_{#phi}-p_{miss}":
 
 
 elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-p_{miss}":
-    cuts = "( %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb )
+    cuts = "( %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Pmiss )
 
 
 elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}-p_{miss}":
-    cuts = "( %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p )
+    cuts = "( %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Pmiss)
 
 
 elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}-select_{#theta}-p_{miss}":
-    cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta )
+    cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss)
 
 
 
@@ -168,7 +172,7 @@ elif Operation=="Plots For Proposal":
         if len(sys.argv)>3:
             Nbins= int(sys.argv[3])
 
-    cut = WeightCut + SuccessCut + SHMSFidCut + delta_eCut + XbCut + Q2Cut + HMSphFidCut + Select_pCut + Select_thCut + HMSthFidCut + PmissCut + theta_rqCut
+    cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss )
     c = plot.CreateCanvas("run%d"%run,"Divide",4,3)
 
 
@@ -182,7 +186,7 @@ elif Operation=="Plots For Proposal":
         xAxis = ["Pm" , 0.2 , 0.8, "|p_{miss}| [GeV/c]"]
 
     elif (Variable=="SHMS"):
-        xyAxes = ["Pe" , "Theta_e" , 0.9*Pe_cent , 1.1*Pe_cent , 0.9*The_cent , 1.3*The_cent , "|p_{e}| [GeV/c]" , "#theta(e) [deg.]" ]
+        xyAxes = ["Pe" , "Theta_e" , 0.9*Pe_cent , 1.1*Pe_cent , 0.8*The_cent , 1.3*The_cent , "|p_{e}| [GeV/c]" , "#theta(e) [deg.]" ]
     
     elif (Variable=="HMS"):
         xyAxes = ["Pp" , "Theta_p" , 0.85*Pp_cent , 1.15*Pp_cent , 0.9*Thp_cent , 1.2*Thp_cent , "|p_{p}| [GeV/c]" , "#theta(p) [deg.]" ]
@@ -197,9 +201,9 @@ elif Operation=="Plots For Proposal":
 
 
     if 'xAxis' in locals():
-        ana.H1(xAxis[0] , cut , "hist" , Nbins , xAxis[1] , xAxis[2] , "" ,xAxis[3] , "" ,38)
+        ana.H1(xAxis[0] , cuts , "hist" , Nbins , xAxis[1] , xAxis[2] , "" ,xAxis[3] , "" ,38)
     elif 'xyAxes' in locals():
-        ana.H2(xyAxes[0] , xyAxes[1], cut , "colz" , Nbins , xyAxes[2] , xyAxes[3], Nbins , xyAxes[4] , xyAxes[5] , "" ,xyAxes[6] , xyAxes[7] )
+        ana.H2(xyAxes[0] , xyAxes[1], cuts , "colz" , Nbins , xyAxes[2] , xyAxes[3], Nbins , xyAxes[4] , xyAxes[5] , "" ,xyAxes[6] , xyAxes[7] )
 
     c.Update()
     wait()
