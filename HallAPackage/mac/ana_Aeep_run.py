@@ -10,7 +10,7 @@ init.createnewdir()
 plot    = TPlots()
 
 
-Operation   = "Pmiss" #"Pmiss" # "Kinematics" # "Plots For Proposal"
+Operation   = "Kinematics" #"Pmiss" # "Kinematics" # "Plots For Proposal"
 Nbins       = 50
 cutname     = ""
 
@@ -30,8 +30,8 @@ Pp_cent = ana.GetPp()
 The_cent = ana.GetThe()
 Thp_cent = ana.GetThp()
 
-Pp_Select = 1.8
-Theta_p_Select = 43.0
+Pp_Select = 1.9 # run 46 is what we use for the proposal - 1.8
+Theta_p_Select = 42.5 # run 46 is what we use for the proposal - 43.0
 
 
 Q2          = "2.5 < Q2"
@@ -39,16 +39,16 @@ Xb          = "1.2 < Q2/(2*0.938*nu)"
 theta_rq    = "theta_rq<40"
 Select_p    = "(fabs(Pp-%f)<%f)"%(Pp_Select,0.1*Pp_Select)
 Select_theta= "(fabs(Theta_p-%f)<1.6)"%Theta_p_Select
-Pmiss       = "0.35 < Pm"
+Pmiss       = "0.3 < Pm"
+LowPmiss    = "Pm < 0.25"
 # electron arm = hs... , hadron arm = ss....
-SHMSFid     = "(-0.04 < hsyptar && hsyptar < 0.04) && (-0.024 < hsxptar && hsxptar < 0.024) && (0.3 < Pm) "
+SHMSFid     = "(-0.04 < hsyptar && hsyptar < 0.04) && (-0.024 < hsxptar && hsxptar < 0.024) "
 HMSthFid    = "(-0.06 < ssyptar && ssyptar < 0.06)"
 HMSphFid    = "(-0.035 < ssxptar && ssxptar < 0.035)"
 delta_e     = "(-10 < hsdelta && hsdelta < 22)"
 delta_p     = "(-10 < ssdelta && ssdelta < 10)"
 WernerCuts  = "(-0.05 < hsyptar && hsyptar < 0.05) && (-0.025 < hsxptar && hsxptar < 0.025) && (-8 < hsdelta && hsdelta < 4) && (-0.06 < ssyptar && ssyptar < 0.06) && (-0.035 < ssxptar && ssxptar < 0.035) && (-10 < ssdelta && ssdelta < 10) && (1.3 < Q2/(2*0.938*nu) && Q2/(2*0.938*nu) < 1.4) && (4. < Q2 && Q2 < 4.5) && (-0.01 < Em && Em < 0.025)"
 RanCuts     = "(-0.028 < hsyptar && hsyptar < 0.028) && (-0.060 < hsxptar && hsxptar < 0.060) && (-4.5 < hsdelta && hsdelta < 4.5) && (-0.028 < ssyptar && ssyptar < 0.028) && (-0.060 < ssxptar && ssxptar < 0.060) && (-4.5 < ssdelta && ssdelta < 4.5) && ( 1. < Q2/(2*0.938*nu) )" 
-#RanCutsthph = "(-0.028 < hsxptar && hsxptar < 0.028) && (-0.060 < hsyptar && hsyptar < 0.060) && (-4.5 < hsdelta && hsdelta < 4.5) && (-0.028 < ssxptar && ssxptar < 0.028) && (-0.060 < ssyptar && ssyptar < 0.060) && (-4.5 < ssdelta && ssdelta < 4.5) && ( 1. < Q2/(2*0.938*nu) )"
 
 
 if cutname == "NoCut":
@@ -63,23 +63,38 @@ elif cutname == "electron-fiducials-HMS_{#phi}":
     cuts = "( %s && %s )"%( SHMSFid , HMSphFid  )
 
 
-elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}":
-    cuts = "( %s && %s && %s )"%( SHMSFid , HMSphFid , Xb )
+elif cutname == "electron-fiducials-HMS_{#phi}-select_{p}-select_{#theta}":
+    cuts = "( %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Select_p , Select_theta )
+
+elif cutname == "electron-fiducials-HMS_{#phi}-select_{p}-select_{#theta}-LowPmiss":
+    cuts = "( %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Select_p , Select_theta , LowPmiss)
 
 
-elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}":
-    cuts = "( %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p )
+elif cutname == "electron-fiducials-HMS_{#phi}-p_{miss}":
+    cuts = "( %s && %s && %s )"%( SHMSFid , HMSphFid  , Pmiss)
 
 
-elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}-select_{#theta}":
-    cuts = "( %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta )
+elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-p_{miss}":
+    cuts = "( %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb )
+
+
+elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}-p_{miss}":
+    cuts = "( %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p )
+
+
+elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}-select_{#theta}-p_{miss}":
+    cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta )
+
+
+
+elif cutname == "electron-fiducials-HMS_{#phi}-Q^{2}-select_{p}-select_{#theta}-LowPmiss":
+    cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Q2 , Select_p , Select_theta , LowPmiss )
+
 
 
 elif cutname == "Ran-Cuts":
     cuts = RanCuts
 
-elif cutname == "Ran-Cuts-theta-phi-reversed":
-    cuts = RanCutsthph
 
 elif cutname == "Werner-Cuts":
     cuts = WernerCuts
@@ -111,12 +126,12 @@ if Operation=="Kinematics":
     c.cd(8)
     ana.H2("Q2" ,"Q2/(2*0.938*nu)", cuts , "colz" , Nbins , 1 , 5 , Nbins , 0 , 3, "run %d"%run , "Q ^{2}  (GeV/c)  ^{2}" , "Bjorken x" )
     c.cd(9)
-    ana.H1("zreacti" , cuts , "hist" , Nbins , -.05 , .05, "run %d"%run , "z(reaction) vertex [cm]" , "" , 38) # for z-reaction see eq. 30 in Hall-A NIM paper
+    ana.H1("zreacti" , cuts , "hist" , Nbins , -1 , 1, "run %d"%run , "z(reaction) vertex [cm]" , "" , 38) # for z-reaction see eq. 30 in Hall-A NIM paper
     c.cd(10)
     h=ana.H1("Pm" , cuts , "hist" , 40 , 0 , 1.6, "run %d"%run , "|p_{miss}| [GeV/c]" , "" , 38)
     ROOT.gPad.SetLogy()
     c.cd(11)
-    h=ana.H1("Em" , cuts , "hist" , 80 , -.02 , .04, "run %d"%run , "E_{miss} [GeV]" , "" , 38)
+    h=ana.H1("Em" , cuts , "hist" , 80 , 0 , 0.4, "run %d"%run , "E_{miss} [GeV]" , "" , 38)
     c.cd(12)
     ana.Text(0.1,0.5,cutname,46,0.07)
     ana.Text(0.1,0.4,"%.0f events"%ana.GetYield(),46,0.07)
@@ -131,10 +146,10 @@ elif Operation=="Pmiss":
     
 
     c = plot.CreateCanvas("run%d"%run)
-    h=ana.H1("Pm" , cuts , "hist" , 40 , 0 , 1.6, "run %d"%run , "|p_{miss}| [GeV/c]" , "" , 38)
-    ana.Text(0.8,0.8*h.GetMaximum(),"%.0f events per %.0f mC"%(ana.GetYield(),ana.GetQ()),46,0.03)
-#    ana.H1("Pm" , cuts , "hist" , 120 , 0 , .6, "run %d"%run , "|p_{miss}| [GeV/c]" , "" , 38)
-#    ROOT.gPad.SetLogy()
+#    h=ana.H1("Pm" , cuts , "hist" , 40 , 0 , 1.6, "" , "|p_{miss}| [GeV/c]" , "" , 38)
+    h=ana.H1("Pm" , cuts , "hist" , 30 , 0 , .6, "" , "|p_{miss}| [GeV/c]" , "" , 38)
+    ana.Text(0.4,0.8*h.GetMaximum(),"%.0f events per %.0f mC"%(ana.GetYield(),ana.GetQ()),46,0.03)
+    ROOT.gPad.SetLogy()
 
 
     c.Update()
