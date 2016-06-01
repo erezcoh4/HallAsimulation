@@ -30,17 +30,17 @@ Pp_cent = ana.GetPp()
 The_cent = ana.GetThe()
 Thp_cent = ana.GetThp()
 
-Pp_Select = 1.9 # run 46 is what we use for the proposal - 1.8
-Theta_p_Select = 42.5 # run 46 is what we use for the proposal - 43.0
+Pp_Select = ana.GetPp() # run 46 is what we use for the proposal - 1.8
+Theta_p_Select = ana.GetThp() # run 46 is what we use for the proposal - 43.0
 
 
 Q2          = "2.5 < Q2"
 Q2LowPmiss  = "2. < Q2"
 Xb          = "1.2 < Q2/(2*0.938*nu)"
-theta_rq    = "theta_rq<40"
+theta_rq    = "theta_rq<50"
 Select_p    = "(fabs(Pp-%f)<%f)"%(Pp_Select,0.1*Pp_Select)
 Select_theta= "(fabs(Theta_p-%f)<1.6)"%Theta_p_Select
-Pmiss       = "0.3 < Pm"
+Pmiss       = "0.35 < Pm"
 LowPmiss    = "Pm < 0.25"
 # electron arm = hs... , hadron arm = ss....
 SHMSFid     = "(-0.04 < hsyptar && hsyptar < 0.04) && (-0.024 < hsxptar && hsxptar < 0.024) "
@@ -90,6 +90,10 @@ elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}-select_{#theta}-
     cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss)
 
 
+elif cutname == "electron-fiducials-HMS_{#phi}-x_{B}-select_{p}-select_{#theta}-p_{miss}-theta_{rq}":
+    cuts = "( %s && %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss , theta_rq)
+
+
 
 elif cutname == "electron-fiducials-HMS_{#phi}-Q^{2}-select_{p}-select_{#theta}-LowPmiss":
     cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Q2 , Select_p , Select_theta , LowPmiss )
@@ -132,10 +136,10 @@ if Operation=="Kinematics":
     c.cd(9)
     ana.H1("zreacti" , cuts , "hist" , Nbins , -1 , 1, "run %d"%run , "z(reaction) vertex [cm]" , "" , 38) # for z-reaction see eq. 30 in Hall-A NIM paper
     c.cd(10)
-    h=ana.H1("Pm" , cuts , "hist" , 40 , 0 , 1.6, "run %d"%run , "|p_{miss}| [GeV/c]" , "" , 38)
+    ana.H1("Pm" , cuts , "hist" , 40 , 0 , 1.6, "run %d"%run , "|p_{miss}| [GeV/c]" , "" , 38)
     ROOT.gPad.SetLogy()
     c.cd(11)
-    h=ana.H1("Em" , cuts , "hist" , 80 , 0 , 0.4, "run %d"%run , "E_{miss} [GeV]" , "" , 38)
+    ana.H1("Em" , cuts , "hist" , 80 , -1 , 1, "run %d"%run , "E_{miss} [GeV]" , "" , 38)
     c.cd(12)
     ana.Text(0.1,0.5,cutname,46,0.07)
     ana.Text(0.1,0.4,"%.0f events"%ana.GetYield(),46,0.07)
@@ -172,7 +176,7 @@ elif Operation=="Plots For Proposal":
         if len(sys.argv)>3:
             Nbins= int(sys.argv[3])
 
-    cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss )
+    cuts = "( %s && %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss , theta_rq)
     c = plot.CreateCanvas("run%d"%run,"Divide",4,3)
 
 
