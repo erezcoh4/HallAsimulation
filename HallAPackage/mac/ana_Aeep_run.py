@@ -10,7 +10,8 @@ init.createnewdir()
 plot    = TPlots()
 
 
-Operation   = "Plots For Proposal" #"Pmiss" # "Kinematics" # "Plots For Proposal"
+Operation   = "ProposalPlots" #"Pmiss" # "Kinematics" # "Plots For Proposal"
+PmissRange  = "LowPmiss"
 Nbins       = 50
 cutname     = ""
 
@@ -168,7 +169,7 @@ elif Operation=="Pmiss":
 
 
 
-elif Operation=="Plots For Proposal":
+elif Operation=="ProposalPlots":
 
     Nbins = 100
     if len(sys.argv)>2:
@@ -176,7 +177,11 @@ elif Operation=="Plots For Proposal":
         if len(sys.argv)>3:
             Nbins= int(sys.argv[3])
 
-    cuts = "( %s && %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss , theta_rq)
+    if PmissRange == "HighPmiss":
+        cuts = "( %s && %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Xb , Select_p , Select_theta , Pmiss , theta_rq)
+    else:
+        cuts = "( %s && %s && %s && %s && %s && %s )"%( SHMSFid , HMSphFid , Select_p , Select_theta , LowPmiss , Q2LowPmiss)
+
     c = plot.CreateCanvas("run%d"%run,"Divide",4,3)
 
 
@@ -184,10 +189,10 @@ elif Operation=="Plots For Proposal":
         xAxis = [Variable , 1.5 , 5, "Q ^{2} (GeV/c) ^{2}"]
 
     elif (Variable=="Xb"):
-        xAxis = ["Q2/(2*0.938*nu)" , 0.9 , 2, "x_{B}"]
+        xAxis = ["Q2/(2*0.938*nu)" , 0.6 , 2, "x_{B}"]
     
     elif (Variable=="Pmiss"):
-        xAxis = ["Pm" , 0.2 , 0.8, "|p_{miss}| [GeV/c]"]
+        xAxis = ["Pm" , 0. , 0.8, "|p_{miss}| [GeV/c]"]
 
     elif (Variable=="SHMS"):
         xyAxes = ["Pe" , "Theta_e" , 0.9*Pe_cent , 1.1*Pe_cent , 0.8*The_cent , 1.3*The_cent , "|p_{e}| [GeV/c]" , "#theta(e) [deg.]" ]
@@ -197,10 +202,10 @@ elif Operation=="Plots For Proposal":
     
 
     elif (Variable=="Xb_vs_Q2"):
-        xyAxes = ["Q2" , "Q2/(2*0.938*nu)" , 1.5 , 5 , 0.9 , 2 , "Q ^{2} (GeV/c) ^{2}" , "x_{B}" ]
+        xyAxes = ["Q2" , "Q2/(2*0.938*nu)" , 1.5 , 5 , 0.6 , 2 , "Q ^{2} (GeV/c) ^{2}" , "x_{B}" ]
     
     elif (Variable=="theta_rq"):
-        xAxis = [Variable , 0 , 60, "#theta_{rq} [deg.]"]
+        xAxis = [Variable , 0 , 180, "#theta_{rq} [deg.]"]
 
 
 
@@ -211,7 +216,7 @@ elif Operation=="Plots For Proposal":
 
     c.Update()
     wait()
-    c.SaveAs(init.dirname()+"/ProposalPlots/"+Variable+".pdf")
+    c.SaveAs(init.dirname()+"/"+Operation+"/"+PmissRange+"/"+Variable+".pdf")
 
 
 
